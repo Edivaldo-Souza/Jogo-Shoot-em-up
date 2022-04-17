@@ -53,6 +53,8 @@ SDL_Rect inimigo01Clip[2];
 
 SDL_Rect inimigo02Clip[2];
 
+SDL_Rect BossClip;
+
 // Classe das TEXTURAS
 class LTextura
 {
@@ -202,7 +204,7 @@ class objInimigo01
 		const int velocidadeEixoY = 1;
 		
 		// flag que decide quando a textura do inimigo deve se mover e ser renderizada
-		bool morto = false;
+		bool morto = true;
 
 		// define valores para as variáveis da classe
 		objInimigo01();
@@ -246,7 +248,7 @@ class objInimigo02
 
 		const int velocidadeEixoY = 6;
 
-		bool morto = false;
+		bool morto = true;
 
 		objInimigo02();
 
@@ -269,6 +271,30 @@ class objInimigo02
 		int posY;
 
 		SDL_Rect caixaDeColisao;
+};
+
+class objBoss
+{
+public:
+	enum Dimensoes
+	{
+		totalDeCaixas = 3,
+		larTotal = 190,
+		altTotal = 410,
+		larCanhao = 160,
+		altCanhao = 40,
+	};
+	SDL_Rect* ponteiroCaixaDeColisao = caixasDeColisao;
+	bool aparecer = false;
+	bool morto = true;
+	objBoss();
+	void definirCaixasDeColisao();
+	void renderizar();
+private:
+	int posXBoss;
+	int posYBoss;
+	int HP;
+	SDL_Rect caixasDeColisao[totalDeCaixas];
 };
 
 class cronometro
@@ -302,6 +328,8 @@ LTextura inimigo02SpriteSheet;
 
 LTextura background;
 
+LTextura bossSpriteSheet;
+
 // Declaração do objJogador que corresponde ao objeto manipulável pelo jogador
 objJogador nave;
 
@@ -312,6 +340,8 @@ objProjetilLaser laser[quantLaser];
 objInimigo01 inimigo01[quantInimigos01];
 
 objInimigo02 inimigo02[quantInimigos02]; //quantInimigos02 = 2
+
+objBoss BossInimigo;
 
 
 void ondaInimigos01(bool flag);
@@ -678,6 +708,7 @@ void objInimigo01::move()
 			posY = rand() % ((altJanela - altInimigo) + 1);
 			caixaDeColisao.x = posX;
 			caixaDeColisao.y = posY;
+			morto = true;
 			laser[i].disparado = false;
 		}
 	}
@@ -771,6 +802,7 @@ void objInimigo02::move1()
 			posY = altJanela / 2;
 			caixaDeColisao.x = posX;
 			caixaDeColisao.y = posY;
+			morto = true;
 			laser[i].disparado = false;
 		}
 	}
@@ -836,6 +868,7 @@ void objInimigo02::move2()
 			posY = altJanela / 2;
 			caixaDeColisao.x = posX;
 			caixaDeColisao.y = posY;
+			morto = true;
 			laser[i].disparado = false;
 		}
 	}
@@ -847,6 +880,59 @@ void objInimigo02::renderizar()
 	if (morto == false)
 	{
 		inimigo01SpriteSheet.renderizar(posX, posY, &inimigo01Clip[1], 0);
+	}
+}
+
+objBoss::objBoss()
+{
+	posXBoss = larJanela;
+	posYBoss = altJanela / 2 - altTotal / 2;
+	HP = 100;
+	for (int i = 0; i < totalDeCaixas - 1; i++)
+	{
+		caixasDeColisao[i].x = NULL;
+		caixasDeColisao[i].y = NULL;
+		caixasDeColisao[i].w = larCanhao;
+		caixasDeColisao[i].h = altCanhao;
+	}
+	caixasDeColisao[2].x = NULL;
+	caixasDeColisao[2].y = NULL;
+	caixasDeColisao[2].w = larTotal;
+	caixasDeColisao[2].h = altTotal;
+
+}
+
+void objBoss::definirCaixasDeColisao()
+{
+	caixasDeColisao[0].x = posXBoss + 7;
+	caixasDeColisao[0].y = posYBoss + 84;
+	caixasDeColisao[1].x = posXBoss + 7;
+	caixasDeColisao[1].y = caixasDeColisao[0].y + 205;
+	caixasDeColisao[2].x = posXBoss + 10;
+	caixasDeColisao[2].y = posYBoss;
+
+}
+
+
+void objBoss::renderizar()
+{
+	if (aparecer == true)
+	{
+		if (posXBoss != larJanela - larTotal)
+		{
+			posXBoss -= 5;
+			bossSpriteSheet.renderizar(posXBoss, posYBoss, &BossClip);
+		}
+		else
+		{
+			aparecer = false;
+			definirCaixasDeColisao();
+			morto = false;
+		}
+	}
+	else
+	{
+		bossSpriteSheet.renderizar(posXBoss, posYBoss, &BossClip);
 	}
 }
 
@@ -939,6 +1025,8 @@ bool loadMedia()
 	projeteisSpriteSheet.loadFromFile("spritesheets_2/projetil_Laser.png",0xFF,0,0xFF);
 	inimigo01SpriteSheet.loadFromFile("spritesInimigos/inimigo01.png",0xFF,0,0xFF);
 	background.loadFromFile("background/background.png", 0xFF, 0, 0);
+	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
+
 	// Definição dos parâmetros da SDL_Rect que armazenará certa porção da textura com os sprites da nave 
 	naveClipParado[0].x = 1;
 	naveClipParado[0].y = 1;
@@ -960,6 +1048,11 @@ bool loadMedia()
 	inimigo01Clip[1].w = 37;
 	inimigo01Clip[1].h = 45;
 
+	BossClip.x = 0;
+	BossClip.y = 0;
+	BossClip.w = 180;
+	BossClip.h = 410;
+
 	return 0;
 }
 
@@ -969,6 +1062,7 @@ void close()
 	naveSpriteSheet.free();
 	projeteisSpriteSheet.free();
 	inimigo01SpriteSheet.free();
+	bossSpriteSheet.free();
 
 	// Desfaz a Janela
 	SDL_DestroyWindow(gJanela);
@@ -1034,8 +1128,12 @@ int main(int argc, char* args[])
 	init();
 	loadMedia();
 	bool sair = false;
+	bool momentoDaFase = true;
+	Uint32 tempoParaOBoss = 10000;
 	SDL_Event e;
 	int deslocamentoBackground = 0;
+	cronometro timerBoss;
+	timerBoss.comecar();
 	// Enquanto sair for o que ele não é  
 	while (!sair)
 	{
@@ -1052,6 +1150,13 @@ int main(int argc, char* args[])
 			nave.avaliarEventos(e);
 			nave.avaliarEventosLaser(e);
 		}
+		if (timerBoss.getTempo() > tempoParaOBoss)
+		{
+			momentoDaFase = false;
+			BossInimigo.aparecer = true;
+			timerBoss.parar();
+		}
+		
 		nave.move();
 
 		deslocamentoBackground -= 1;
@@ -1062,17 +1167,17 @@ int main(int argc, char* args[])
 		
 		for (int i = 0; i < quantInimigos01; i++)
 		{
-			ondaInimigos01(true);
+			ondaInimigos01(momentoDaFase);
+		}
+		
+		for (int i = 0; i < quantInimigos02; i++)
+		{
+			ondaInimigos02(momentoDaFase);
 		}
 		
 		for (int i = 0; i < quantInimigos01; i++)
 		{
 			inimigo01[i].move();
-		}
-
-		for (int i = 0; i < quantInimigos02; i++)
-		{
-			ondaInimigos02(true);
 		}
 
 		inimigo02[0].move1();
@@ -1106,6 +1211,9 @@ int main(int argc, char* args[])
 
 		inimigo02[0].renderizar();
 		inimigo02[1].renderizar();
+
+		BossInimigo.renderizar();
+
 
 		SDL_RenderPresent(gRenderizador);
 	}
