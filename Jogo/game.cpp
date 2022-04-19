@@ -1257,10 +1257,7 @@ int main(int argc, char* args[])
 		
 		if (timerDisparo.getTempo() > tempoParaDisparo)
 		{		
-			for (int i = 0; i < quantLaser; i++)
-			{
-				BossDisparo[i].disparado = true;
-			}
+			BossDisparo[0].disparado = true;
 			tempoParaDisparo = tempoParaDisparo + 5000;
 		}
 		
