@@ -22,8 +22,6 @@ const int quantInimigos02 = 2;
 // Declaração do inteiro usado para selecionar os indices do vetor de objProjeteis "laser"
 int indiceVetorLaser;
 
-int indiceVetorBossDisparo;
-
 int Div = larJanela / 4;
 
 // Função responsável pela inicialização da biblioteca SDL
