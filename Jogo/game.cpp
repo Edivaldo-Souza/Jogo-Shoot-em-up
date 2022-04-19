@@ -1256,7 +1256,8 @@ int main(int argc, char* args[])
 		if (timerDisparo.getTempo() > tempoParaDisparo)
 		{		
 			BossDisparo[0].disparado = true;
-			tempoParaDisparo = tempoParaDisparo + 5000;
+			timerDisparo.parar();
+			timerDisparo.comecar();
 		}
 		
 		
