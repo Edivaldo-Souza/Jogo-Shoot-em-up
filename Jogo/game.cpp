@@ -22,7 +22,9 @@ const int quantInimigos02 = 2;
 // Declaração do inteiro usado para selecionar os indices do vetor de objProjeteis "laser"
 int indiceVetorLaser;
 
-int Div = larJanela/4;
+int indiceVetorBossDisparo;
+
+int Div = larJanela / 4;
 
 // Função responsável pela inicialização da biblioteca SDL
 bool init();
@@ -55,43 +57,45 @@ SDL_Rect inimigo02Clip[2];
 
 SDL_Rect BossClip;
 
+SDL_Rect BossProjetilClip;
+
 // Classe das TEXTURAS
 class LTextura
 {
 public:
-	
+
 	// função que atribui os valores inicias as variáveis da classe
 	LTextura();
-	
+
 	// função que redefine os valores das variáveis da classe para como iniciamente foram definidas em LTextura()
 	~LTextura();
-	
+
 	// função que recebe uma string correspondente ao caminho(nome_da_pasta/imagem.png) da imagem a ser definida como textura 
-	bool loadFromFile(std::string path,Uint32 r, Uint32 g, Uint32 b);
-	
+	bool loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b);
+
 	// função que apaga a textura mas recente carregada, e redifine suas dimensões para o valor de 0 
 	void free();
-	
+
 	// função que renderiza uma textura na janela recebendo sua posição(x,y), um SDL_Rect para o caso
 	// de ser necessário renderizar apenas uma parcela da imagem carregada, um ângulo de rotação,
 	// um SDL_Point para definir um ponto de referência para a rotação, e um SDL_RendererFlip para
 	// espelhar sua posição na vertical e horizontal.
 	void renderizar(int x, int y, SDL_Rect* clip = NULL, double angulo = 0.0, SDL_Point* centro = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	
+
 	// função que retorna a variável mLargura;
 	int getLargura();
-	
+
 	// função que retorna a variável mAltura;
 	int getAltura();
 
 private:
-	
+
 	// Variável que recebe a textura para os objetos da classe LTextura
 	SDL_Texture* mTextura;
-	
+
 	// inteiro que recebe a largura da textura
 	int mLargura;
-	
+
 	// inteiro que recebe a altura da textura
 	int mAltura;
 };
@@ -117,7 +121,7 @@ public:
 	// deslocamento da textura do jogador ao somar ou subtrair a constante deslocamento
 	// a variável mVelY, a qual será somada a posição da textura pela função move()
 	void avaliarEventos(SDL_Event& e);
-	
+
 	// função que recebe como parâmetro eventos (tecla SPACE) e define quando um projetil deve ser disparado
 	void avaliarEventosLaser(SDL_Event& e);
 
@@ -129,13 +133,13 @@ public:
 
 	// função que retorna o valor da altura da textura do jogador
 	int getAltura();
-	
+
 	// função que retorna o valor da largura da textura do jogador
 	int getLargura();
-	
+
 	// função que retorna a posição Y da textura do jogador
 	int getPosY();
-	
+
 	// função que retorna a posição X da textura do jogador
 	int getPosX();
 
@@ -143,10 +147,10 @@ public:
 	SDL_Rect getCaixaDeColisao();
 private:
 	// inteiros correspondentes as posições X e Y da textura do jogador
-	int mPosY,mPosX;
+	int mPosY, mPosX;
 
 	// inteiros correspondentes ao sentido do deslocamento da textura do jogador
-	int mVelY,mVelX;
+	int mVelY, mVelX;
 
 	// Caixa de colisão do jogador
 	SDL_Rect caixaDeColisao;
@@ -160,20 +164,20 @@ public:
 	static const int larProjetil = 41;
 	static const int altProjetil = 24;
 	static const int velocidadeProjetil = 15;
-	
+
 	SDL_Rect* ponteiroCaixaDeColisao = &caixaDeColisao;
 	// a variável disparado é uma flag que indica quando o projetil deve mover ou não
 	// a variàvel "atualizaPosicaoDePartida" é uma flag que indica quando o projétil deve atualizar sua posição de partida
 	bool atualizaPosicaoDePartida = false;
-	
+
 	bool disparado = false;
-	
+
 	// função que define valores padrões para as variáveis do tipo objProjetil
 	objProjetilLaser();
-	
+
 	// método responsável por modificar a posição X de um objProjetil fazendo com que este se mova  
 	void move();
-	
+
 	// renderiza a textura do projétil na tela
 	void renderizar();
 
@@ -190,87 +194,87 @@ private:
 //classe do Inimigo01
 class objInimigo01
 {
-	public:
-		// largura do inimigo
-		const int larInimigo = 43;
-		
-		// altura do inimigo
-		const int altInimigo = 45;
-		
-		// velocidade no eixo x do inimigo
-		const int velocidadeEixoX = 5;
+public:
+	// largura do inimigo
+	const int larInimigo = 43;
 
-		// velocidade no eixo y do inimigo
-		const int velocidadeEixoY = 1;
-		
-		// flag que decide quando a textura do inimigo deve se mover e ser renderizada
-		bool morto = true;
+	// altura do inimigo
+	const int altInimigo = 45;
 
-		// define valores para as variáveis da classe
-		objInimigo01();
-		
-		// move o inimigo
-		void move();
+	// velocidade no eixo x do inimigo
+	const int velocidadeEixoX = 5;
 
-		// renderiza a textura do inimigo
-		void renderizar();
+	// velocidade no eixo y do inimigo
+	const int velocidadeEixoY = 1;
 
-		// retorna a altura do inimigo
-		int getAltura();
+	// flag que decide quando a textura do inimigo deve se mover e ser renderizada
+	bool morto = true;
 
-		// retorn a largura do inimigo
-		int getLargura();
+	// define valores para as variáveis da classe
+	objInimigo01();
 
-		// retorn a posição em X do inimigo
-		int getPosX();
+	// move o inimigo
+	void move();
 
-		// retorna a caixa de colisão do inimigo
-		SDL_Rect getCaixaDeColisao();
-	private:
-		// Posição em X do inimigo
-		int posX;
-		
-		// Posição em Y do inimigo
-		int posY;
+	// renderiza a textura do inimigo
+	void renderizar();
 
-		// Caixa de colisão do inimigo
-		SDL_Rect caixaDeColisao;
+	// retorna a altura do inimigo
+	int getAltura();
+
+	// retorn a largura do inimigo
+	int getLargura();
+
+	// retorn a posição em X do inimigo
+	int getPosX();
+
+	// retorna a caixa de colisão do inimigo
+	SDL_Rect getCaixaDeColisao();
+private:
+	// Posição em X do inimigo
+	int posX;
+
+	// Posição em Y do inimigo
+	int posY;
+
+	// Caixa de colisão do inimigo
+	SDL_Rect caixaDeColisao;
 };
 
 class objInimigo02
 {
-	public :
-		const int larInimigo = 37;
+public:
+	const int larInimigo = 37;
 
-		const int altInimigo = 45;
+	const int altInimigo = 45;
 
-		const int velocidadeEixoX = 5;
+	const int velocidadeEixoX = 5;
 
-		const int velocidadeEixoY = 6;
+	const int velocidadeEixoY = 6;
 
-		bool morto = true;
+	bool morto = true;
 
-		objInimigo02();
+	objInimigo02();
 
-		void move1();
+	void move1();
 
-		void move2();
+	void move2();
 
-		void renderizar();
+	void renderizar();
 
-		int getAltura();
+	int getAltura();
 
-		int getLargura();
+	int getLargura();
 
 
-		SDL_Rect getCaixaDeColisao();
+	SDL_Rect getCaixaDeColisao();
 
-	private:
-		int posX;
+private:
+	int posX;
 
-		int posY;
+	int posY;
 
-		SDL_Rect caixaDeColisao;
+	SDL_Rect caixaDeColisao;
 };
 
 class objBoss
@@ -297,22 +301,48 @@ private:
 	SDL_Rect caixasDeColisao[totalDeCaixas];
 };
 
+class objProjetilBoss
+{
+public :
+	static const int larProjetil = 190;
+	static const int altProjetil = 70;
+	static const int velocidadeProjetil = 8;
+
+
+	bool disparado = false;
+
+
+	objProjetilBoss();
+
+	void move();
+
+	void renderizar();
+
+	SDL_Rect getCaixaDeColisao();
+private :
+	int posX;
+
+	int posY;
+
+	SDL_Rect CaixaDeColisao;
+};
+
 class cronometro
 {
-	public:
-		cronometro();
-		void comecar();
-		void parar();
-		void pausar();
-		void despausar();
-		Uint32 getTempo();
-		bool foiIniciado();
-		bool foiPausado();
-	private:
-		Uint32 TempoQuandoIniciado;
-		Uint32 TempoQuandoPausado;
-		bool pausado;
-		bool iniciado;
+public:
+	cronometro();
+	void comecar();
+	void parar();
+	void pausar();
+	void despausar();
+	Uint32 getTempo();
+	bool foiIniciado();
+	bool foiPausado();
+private:
+	Uint32 TempoQuandoIniciado;
+	Uint32 TempoQuandoPausado;
+	bool pausado;
+	bool iniciado;
 };
 
 // Declaração do objeto LTextura que armazena a imagem com todos os sprites da nave do jogador
@@ -343,6 +373,9 @@ objInimigo02 inimigo02[quantInimigos02]; //quantInimigos02 = 2
 
 objBoss BossInimigo;
 
+objProjetilBoss BossDisparo[quantLaser];
+
+
 
 void ondaInimigos01(bool flag);
 
@@ -363,36 +396,36 @@ LTextura::~LTextura()
 	free();
 }
 // função que recebe uma string correspondente ao caminho(nome_da_pasta/imagem.png) da imagem a ser utilizada como textura
-bool LTextura::loadFromFile(std::string path,Uint32 r,Uint32 g,Uint32 b)
+bool LTextura::loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b)
 {
 	// free() apaga qualquer definição de mTextura e suas dimensões antes de carregar uma nova imagem
 	free();
-	
+
 	// novaTextura é uma SDL_Texture que está apenas no escopo dessa função para criar a textura
 	// e retornar seu valor para a variável da classe mTextura
 	SDL_Texture* novaTextura = NULL;
-	
+
 	// loadSurface é a SDL_Surface onde se é carregada a imagem correspondente ao caminho passado no parâmetro da função
 	SDL_Surface* loadSuperficie = IMG_Load(path.c_str());
-	
+
 	// SDL_ColorKey torna certa tonalidade de pixels transparentes de uma SDL_Surface
 	SDL_SetColorKey(loadSuperficie, SDL_TRUE, SDL_MapRGB(loadSuperficie->format, r, g, b));
-	
+
 	// novaTextura cria recebe o valor da criação de uma textura a partir de loadSuperficie
 	novaTextura = SDL_CreateTextureFromSurface(gRenderizador, loadSuperficie);
-	
+
 	// mLargura recebe a largura de loadSuperficie
 	mLargura = loadSuperficie->w;
-	
+
 	// mAltura recebe a altura de loadSuperficie
 	mAltura = loadSuperficie->h;
-	
+
 	// Apaga a imagem carregada em loadSuperficie
 	SDL_FreeSurface(loadSuperficie);
-	
+
 	// mTextura recebe a textura de novaTextura
 	mTextura = novaTextura;
-	
+
 	// a função retorna true quando mTextura armazenar alguma coisa  
 	return mTextura != NULL;
 }
@@ -448,7 +481,7 @@ int LTextura::getAltura()
 // função que atribui os valores iniciais as variáveis desta classe
 objJogador::objJogador()
 {
-	mPosY = altJanela/2 - altJogador/2;
+	mPosY = altJanela / 2 - altJogador / 2;
 	mPosX = 10;
 	mVelY = 0;
 	mVelX = 0;
@@ -469,9 +502,9 @@ void objJogador::avaliarEventos(SDL_Event& e)
 		// E caso essa tecla seja..
 		switch (e.key.keysym.sym)
 		{
-		// Igual a "w", mVelY assume um valor negativo que faz a posição em Y da textura do jogador se aproximar de 0
+			// Igual a "w", mVelY assume um valor negativo que faz a posição em Y da textura do jogador se aproximar de 0
 		case SDLK_w: mVelY -= deslocamento; break;
-		// Igual a "s", mVelY assume um valor positivo que faz a posição em Y da textura do jogador se aproximar da altura da janela
+			// Igual a "s", mVelY assume um valor positivo que faz a posição em Y da textura do jogador se aproximar da altura da janela
 		case SDLK_s: mVelY += deslocamento; break;
 			// Igual a "a", mVelY assume um valor negativo que faz a posição em X da textura do jogador se aproximar de 0
 		case SDLK_a: mVelX -= deslocamento; break;
@@ -485,11 +518,11 @@ void objJogador::avaliarEventos(SDL_Event& e)
 		// E caso essa tecla seja...
 		switch (e.key.keysym.sym)
 		{
-		// Igual a "w", o valor de mVelY será incrementado no mesmo valor em que foi reduzido a fim
-		// de evitar um acúmulo de subtrações que poderiam aumentar a taxa de pixels deslocados por
-		// apertar de tecla
+			// Igual a "w", o valor de mVelY será incrementado no mesmo valor em que foi reduzido a fim
+			// de evitar um acúmulo de subtrações que poderiam aumentar a taxa de pixels deslocados por
+			// apertar de tecla
 		case SDLK_w: mVelY += deslocamento; break;
-		// A mesma ideia se aplica quando se aperta a tecla "s", apenas as operações são invertidas;
+			// A mesma ideia se aplica quando se aperta a tecla "s", apenas as operações são invertidas;
 		case SDLK_s: mVelY -= deslocamento; break;
 		case SDLK_a: mVelX += deslocamento; break;
 		case SDLK_d: mVelX -= deslocamento; break;
@@ -531,17 +564,17 @@ void objJogador::move()
 	caixaDeColisao.y += mVelY;
 	// Caso a posição da textura assuma um valor menor do que 0, ou se a textura do jogador tenda
 	// a ultrapassar o limite da tela por conta de sua altura em relação a posição que ela assume...
-	if ((mPosY < 0)|| (mPosY + altJogador > altJanela))
+	if ((mPosY < 0) || (mPosY + altJogador > altJanela))
 	{
 		// A posição em Y da textura é decrementada ou incrementada de modo a evitar que a textura ultrapasse a tela
 		mPosY -= mVelY;
 		caixaDeColisao.y -= mVelY;
 	}
-	
+
 	// o mesmo se aplica para o deslocamento em Y
 	mPosX += mVelX;
 	caixaDeColisao.x += mVelX;
-	if ((mPosX < 0)||(mPosX + larJogador > larJanela))
+	if ((mPosX < 0) || (mPosX + larJogador > larJanela))
 	{
 		mPosX -= mVelX;
 		caixaDeColisao.x -= mVelX;
@@ -581,7 +614,7 @@ SDL_Rect objJogador::getCaixaDeColisao()
 // função que renderiza a textura do jogador
 void objJogador::renderizar()
 {
-	naveSpriteSheet.renderizar(mPosX,mPosY,&naveClipParado[0], 90, NULL);
+	naveSpriteSheet.renderizar(mPosX, mPosY, &naveClipParado[0], 90, NULL);
 }
 
 // função que define os valores de suas variáveis  
@@ -605,8 +638,8 @@ void objProjetilLaser::move()
 		posX = nave.getPosX() + nave.getLargura();
 		caixaDeColisao.x = nave.getPosX() + nave.getLargura();
 		// posição em Y no meio da frente da nave
-		posY = (nave.getPosY() + nave.getAltura() / 2) - altProjetil/2;
-		caixaDeColisao.y = (nave.getPosY() + nave.getAltura() / 2) - altProjetil/2;
+		posY = (nave.getPosY() + nave.getAltura() / 2) - altProjetil / 2;
+		caixaDeColisao.y = (nave.getPosY() + nave.getAltura() / 2) - altProjetil / 2;
 		// o valor de "atualizaPosicaoDePartida" recebe false para que está condição não seja mais satisfeita
 		atualizaPosicaoDePartida = false;
 	}
@@ -635,7 +668,7 @@ void objProjetilLaser::renderizar()
 	// Enquanto disparado for igual a true, a textura do projetil será renderizada na tela toda vez que for chamada
 	if (disparado == true)
 	{
-		projeteisSpriteSheet.renderizar(posX, posY,&laserClip[0],90);
+		projeteisSpriteSheet.renderizar(posX, posY, &laserClip[0], 90);
 	}
 }
 
@@ -649,7 +682,7 @@ SDL_Rect objProjetilLaser::getCaixaDeColisao()
 objInimigo01::objInimigo01()
 {
 	posX = larJanela;
-	posY = rand() % ((altJanela - altInimigo)+1);
+	posY = rand() % ((altJanela - altInimigo) + 1);
 	caixaDeColisao.x = posX;
 	caixaDeColisao.y = posY;
 	caixaDeColisao.w = larInimigo;
@@ -680,9 +713,9 @@ void objInimigo01::move()
 		}
 	}
 	// Caso o inimigo atinga o jogador
-	if ((verificaColisao(caixaDeColisao, nave.getCaixaDeColisao())==true))
+	if ((verificaColisao(caixaDeColisao, nave.getCaixaDeColisao()) == true))
 	{
-		
+
 		posX = larJanela;
 		posY = rand() % ((altJanela - altInimigo) + 1);
 		caixaDeColisao.x = posX;
@@ -690,7 +723,7 @@ void objInimigo01::move()
 		morto = true;
 	}
 	// Caso o inimigo ultrapasse a tela
-	if (posX < larInimigo*-1)
+	if (posX < larInimigo * -1)
 	{
 		posX = larJanela;
 		posY = rand() % ((altJanela - altInimigo) + 1);
@@ -698,11 +731,11 @@ void objInimigo01::move()
 		caixaDeColisao.y = posY;
 		morto = true;
 	}
-	
+
 	// 
 	for (int i = 0; i < quantLaser; i++)
 	{
-		if (verificaColisao(caixaDeColisao, laser[i].getCaixaDeColisao()) == true && laser[i].disparado==true)
+		if (verificaColisao(caixaDeColisao, laser[i].getCaixaDeColisao()) == true && laser[i].disparado == true)
 		{
 			posX = larJanela;
 			posY = rand() % ((altJanela - altInimigo) + 1);
@@ -735,7 +768,7 @@ SDL_Rect objInimigo01::getCaixaDeColisao()
 objInimigo02::objInimigo02()
 {
 	posX = larJanela;
-	posY = altJanela/2;
+	posY = altJanela / 2;
 	caixaDeColisao.x = posX;
 	caixaDeColisao.y = posY;
 	caixaDeColisao.w = larInimigo;
@@ -748,7 +781,7 @@ void objInimigo02::move1()
 	{
 		posX -= velocidadeEixoX;
 		caixaDeColisao.x -= velocidadeEixoX;
-		
+
 		if (posX > larJanela - Div)
 		{
 			posY -= velocidadeEixoY;
@@ -756,14 +789,14 @@ void objInimigo02::move1()
 		}
 		else
 		{
-			if (posX > larJanela-(2*Div))
+			if (posX > larJanela - (2 * Div))
 			{
 				posY += velocidadeEixoY;
 				caixaDeColisao.y += velocidadeEixoY;
 			}
 			else
 			{
-				if (posX >larJanela-(3*Div))
+				if (posX > larJanela - (3 * Div))
 				{
 					posY += velocidadeEixoY;
 					caixaDeColisao.y += velocidadeEixoY;
@@ -775,7 +808,7 @@ void objInimigo02::move1()
 				}
 			}
 		}
-	
+
 	}
 	if ((verificaColisao(caixaDeColisao, nave.getCaixaDeColisao()) == true))
 	{
@@ -936,6 +969,62 @@ void objBoss::renderizar()
 	}
 }
 
+objProjetilBoss::objProjetilBoss()
+{
+	posX = larJanela-250;
+	posY = 410 / 2;
+	CaixaDeColisao.x = posX;
+	CaixaDeColisao.y = posY;
+	CaixaDeColisao.w = larProjetil;
+	CaixaDeColisao.h = altProjetil;
+}
+
+
+
+void objProjetilBoss::move()
+{
+	if (disparado == true)
+	{
+		posX -= velocidadeProjetil;
+		CaixaDeColisao.x -= velocidadeProjetil;
+	}
+	else
+	{
+		posX =larJanela-250;
+		CaixaDeColisao.x = posX;
+
+	}
+	if (posX < 0-larProjetil)
+	{
+		disparado = false;
+
+	}
+	for (int i = 0; i < quantLaser; i++)
+	{
+		if (verificaColisao(CaixaDeColisao, nave.getCaixaDeColisao()) == true && BossDisparo[i].disparado == true)
+		{
+			
+			BossDisparo[i].disparado = false;
+		}
+	}
+}
+
+void objProjetilBoss::renderizar()
+{
+	if(disparado == true)
+	{
+		bossSpriteSheet.renderizar(posX, posY, &BossProjetilClip, 180 );
+	}
+	
+}
+
+SDL_Rect objProjetilBoss::getCaixaDeColisao()
+{
+	return CaixaDeColisao;
+}
+
+
+
 cronometro::cronometro()
 {
 	TempoQuandoIniciado = 0;
@@ -982,7 +1071,7 @@ void cronometro::despausar()
 Uint32 cronometro::getTempo()
 {
 	Uint32 tempo = 0;
-	if(iniciado == true)
+	if (iniciado == true)
 	{
 		if (pausado == true)
 		{
@@ -1021,9 +1110,9 @@ bool init()
 
 bool loadMedia()
 {
-	naveSpriteSheet.loadFromFile("spritesheets/STRIP-1.gif",0xFF,0xFF,0xFF);
-	projeteisSpriteSheet.loadFromFile("spritesheets_2/projetil_Laser.png",0xFF,0,0xFF);
-	inimigo01SpriteSheet.loadFromFile("spritesInimigos/inimigo01.png",0xFF,0,0xFF);
+	naveSpriteSheet.loadFromFile("spritesheets/STRIP-1.gif", 0xFF, 0xFF, 0xFF);
+	projeteisSpriteSheet.loadFromFile("spritesheets_2/projetil_Laser.png", 0xFF, 0, 0xFF);
+	inimigo01SpriteSheet.loadFromFile("spritesInimigos/inimigo01.png", 0xFF, 0, 0xFF);
 	background.loadFromFile("background/background.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
 
@@ -1052,6 +1141,11 @@ bool loadMedia()
 	BossClip.y = 0;
 	BossClip.w = 180;
 	BossClip.h = 410;
+
+	BossProjetilClip.x = 0;
+	BossProjetilClip.y = 410;
+	BossProjetilClip.w = 201;
+	BossProjetilClip.h = 70;
 
 	return 0;
 }
@@ -1130,13 +1224,16 @@ int main(int argc, char* args[])
 	bool sair = false;
 	bool momentoDaFase = true;
 	Uint32 tempoParaOBoss = 10000;
+	Uint32 tempoParaDisparo = 5000;
 	SDL_Event e;
 	int deslocamentoBackground = 0;
 	cronometro timerBoss;
 	timerBoss.comecar();
+	cronometro timerDisparo;
 	// Enquanto sair for o que ele não é  
 	while (!sair)
 	{
+
 		// Looping responsável por ler os eventos, que termina apenas quando a quantidade de eventos
 		// acumulados seja igual a 0
 		while (SDL_PollEvent(&e) != 0)
@@ -1155,26 +1252,38 @@ int main(int argc, char* args[])
 			momentoDaFase = false;
 			BossInimigo.aparecer = true;
 			timerBoss.parar();
+			timerDisparo.comecar();
 		}
 		
+		if (timerDisparo.getTempo() > tempoParaDisparo)
+		{		
+			for (int i = 0; i < quantLaser; i++)
+			{
+				BossDisparo[i].disparado = true;
+			}
+			tempoParaDisparo = tempoParaDisparo + 5000;
+		}
+		
+		
+
 		nave.move();
 
 		deslocamentoBackground -= 1;
-		if (deslocamentoBackground < background.getLargura()*-1)
+		if (deslocamentoBackground < background.getLargura() * -1)
 		{
 			deslocamentoBackground = 0;
 		}
-		
+
 		for (int i = 0; i < quantInimigos01; i++)
 		{
 			ondaInimigos01(momentoDaFase);
 		}
-		
+
 		for (int i = 0; i < quantInimigos02; i++)
 		{
 			ondaInimigos02(momentoDaFase);
 		}
-		
+
 		for (int i = 0; i < quantInimigos01; i++)
 		{
 			inimigo01[i].move();
@@ -1182,26 +1291,29 @@ int main(int argc, char* args[])
 
 		inimigo02[0].move1();
 		inimigo02[1].move2();
-		
+
 		for (int i = 0; i < quantLaser; i++)
 		{
 			laser[i].move();
+			BossDisparo[i].move();
 		}
 
 		SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(gRenderizador);
-		
+
 		background.renderizar(deslocamentoBackground, 0);
-		background.renderizar(deslocamentoBackground + background.getLargura(),0);
-		
+		background.renderizar(deslocamentoBackground + background.getLargura(), 0);
+
 		nave.renderizar();
-		
+
 		for (int i = 0; i < quantLaser; i++)
 		{
 			//SDL_SetRenderDrawColor(gRenderizador, 0, 0xFF, 0, 0xFF);
 			//SDL_RenderDrawRect(gRenderizador, laser[i].ponteiroCaixaDeColisao);
 			laser[i].renderizar();
+			BossDisparo[i].renderizar();
 		}
+	
 
 		for (int i = 0; i < quantInimigos01; i++)
 		{
