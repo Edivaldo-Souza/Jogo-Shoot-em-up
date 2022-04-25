@@ -1543,6 +1543,10 @@ int main(int argc, char* args[])
 				}
 				switch (menu)
 				{
+				case 0:
+					menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+					menu = 3;
+					break;
 				case 1:
 					menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
 					break;
