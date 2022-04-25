@@ -61,6 +61,10 @@ SDL_Rect BossClip;
 
 SDL_Rect BossProjetilClip[2];
 
+SDL_Rect menuInicialClip[3];
+
+
+
 // Classe das TEXTURAS
 class LTextura
 {
@@ -77,6 +81,9 @@ public:
 
 	// função que apaga a textura mas recente carregada, e redifine suas dimensões para o valor de 0 
 	void free();
+
+	// funçao para realizar a modulação das cores de uma textura 
+	void setColor(Uint8 r, Uint8 g, Uint8 b);
 
 	// função que renderiza uma textura na janela recebendo sua posição(x,y), um SDL_Rect para o caso
 	// de ser necessário renderizar apenas uma parcela da imagem carregada, um ângulo de rotação,
@@ -343,7 +350,7 @@ private:
 
 class objProjetilBoss
 {
-public :
+public:
 	static const int larProjetil = 190;
 	static const int altProjetil = 70;
 	static const int velocidadeProjetil = 8;
@@ -359,7 +366,7 @@ public :
 	void renderizar();
 
 	SDL_Rect getCaixaDeColisao();
-private :
+private:
 	int posX;
 
 	int posY;
@@ -369,27 +376,27 @@ private :
 
 class objProjetilBoss02
 {
-	public:
-		static const int quantCaixasDeColisao = 2;
-		const int larProjetil = 15;
-		const int altProjetil = 14;
-		const int velocidadeProjetil = 5;
-		bool disparado1 = false;
-		bool disparado2 = false;
-		bool sentidoProjetil1 = false;
-		bool sentidoProjetil2 = false;
-		objProjetilBoss02();
-		void redefinir();
-		void definePosicao();
-		void move();
-		void renderizar();
-	private:
-		int posX01;
-		int posY01;
-		int posX02;
-		int posY02;
-		int posYAlvo;
-		SDL_Rect caixaDeColisao[quantCaixasDeColisao];
+public:
+	static const int quantCaixasDeColisao = 2;
+	const int larProjetil = 15;
+	const int altProjetil = 14;
+	const int velocidadeProjetil = 5;
+	bool disparado1 = false;
+	bool disparado2 = false;
+	bool sentidoProjetil1 = false;
+	bool sentidoProjetil2 = false;
+	objProjetilBoss02();
+	void redefinir();
+	void definePosicao();
+	void move();
+	void renderizar();
+private:
+	int posX01;
+	int posY01;
+	int posX02;
+	int posY02;
+	int posYAlvo;
+	SDL_Rect caixaDeColisao[quantCaixasDeColisao];
 };
 
 
@@ -408,6 +415,10 @@ LTextura background;
 
 LTextura bossSpriteSheet;
 
+LTextura menuInicial;
+
+LTextura menuSelecao;
+
 // Declaração do objJogador que corresponde ao objeto manipulável pelo jogador
 objJogador nave;
 
@@ -424,6 +435,8 @@ objBoss BossInimigo;
 objProjetilBoss BossDisparo;
 
 objProjetilBoss02 BossProjetil02[quantProjetilBoss02];
+
+
 
 void ondaInimigos01(bool flag);
 
@@ -490,6 +503,13 @@ void LTextura::free()
 		mAltura = 0;
 	}
 }
+
+// funçao para realizar a modulação das cores de uma textura 
+void LTextura::setColor(Uint8 r, Uint8 g, Uint8 b)
+{
+	SDL_SetTextureColorMod(mTextura, r, g, b);
+}
+
 
 // função que renderiza uma textura na janela recebendo sua posição(x,y), um SDL_Rect para o caso
 // de ser necessário renderizar apenas uma parcela da imagem carregada, um ângulo de rotação,
@@ -660,7 +680,7 @@ void objJogador::avaliarColisao()
 			tempoInvencibilidade.comecar();
 		}
 	}
-	else if(tempoInvencibilidade.getTempo() > tempoImortal)
+	else if (tempoInvencibilidade.getTempo() > tempoImortal)
 	{
 		tempoInvencibilidade.parar();
 	}
@@ -1070,7 +1090,7 @@ void objBoss::renderizar()
 
 objProjetilBoss::objProjetilBoss()
 {
-	posX = larJanela-250;
+	posX = larJanela - 250;
 	posY = 410 / 2;
 	CaixaDeColisao.x = posX;
 	CaixaDeColisao.y = posY;
@@ -1089,11 +1109,11 @@ void objProjetilBoss::move()
 	}
 	else
 	{
-		posX =larJanela-250;
+		posX = larJanela - 250;
 		CaixaDeColisao.x = posX;
 
 	}
-	if (posX < 0-larProjetil)
+	if (posX < 0 - larProjetil)
 	{
 		disparado = false;
 
@@ -1113,11 +1133,11 @@ void objProjetilBoss::redefinir()
 
 void objProjetilBoss::renderizar()
 {
-	if(disparado == true)
+	if (disparado == true)
 	{
 		bossSpriteSheet.renderizar(posX, posY, &BossProjetilClip[0], 180);
 	}
-	
+
 }
 
 SDL_Rect objProjetilBoss::getCaixaDeColisao()
@@ -1150,7 +1170,7 @@ void objProjetilBoss02::definePosicao()
 		caixaDeColisao[0].x = posX01;
 		caixaDeColisao[0].y = posY01;
 		disparado1 = true;
-		
+
 		posX02 = BossInimigo.ponteiroCaixaDeColisao[1].x;
 		posY02 = BossInimigo.ponteiroCaixaDeColisao[1].y;
 		caixaDeColisao[1].x = posX02;
@@ -1233,6 +1253,7 @@ void objProjetilBoss02::renderizar()
 		bossSpriteSheet.renderizar(posX02, posY02, &BossProjetilClip[1]);
 	}
 }
+
 
 cronometro::cronometro()
 {
@@ -1324,6 +1345,8 @@ bool loadMedia()
 	inimigo01SpriteSheet.loadFromFile("spritesInimigos/inimigo01.png", 0xFF, 0, 0xFF);
 	background.loadFromFile("background/background.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
+	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
+	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
 
 	// Definição dos parâmetros da SDL_Rect que armazenará certa porção da textura com os sprites da nave 
 	naveClipParado[0].x = 1;
@@ -1360,6 +1383,22 @@ bool loadMedia()
 	BossProjetilClip[1].y = 414;
 	BossProjetilClip[1].w = 15;
 	BossProjetilClip[1].h = 14;
+
+	menuInicialClip[0].x = 0;
+	menuInicialClip[0].y = 0;
+	menuInicialClip[0].w = 156;
+	menuInicialClip[0].h = 55;
+
+	menuInicialClip[1].x = 0;
+	menuInicialClip[1].y = 56;
+	menuInicialClip[1].w = 159;
+	menuInicialClip[1].h = 55;
+
+	menuInicialClip[2].x = 0;
+	menuInicialClip[2].y = 110;
+	menuInicialClip[2].w = 93;
+	menuInicialClip[2].h = 43;
+
 
 	return 0;
 }
@@ -1460,29 +1499,88 @@ int main(int argc, char* args[])
 	bool sair = false;
 	bool momentoDaFase = true;
 	bool gameover = false;
+	bool comeco = false;
 	Uint32 tempoParaOBoss = 20000;
 	Uint32 tempoParaDisparo = 5000;
 	Uint32 tempoParaDisparo2 = 2000;
 	SDL_Event e;
 	int deslocamentoBackground = 0;
+	int menu = 1;
 	cronometro timerBoss;
 	timerBoss.comecar();
 	cronometro timerDisparo;
 	cronometro intervaloEntreDisparos;
 	// Enquanto sair for o que ele não é  
+	
+	
 	while (!sair)
 	{
+		while (!comeco)
+		{
+			menuSelecao.setColor(0, 0, 255);
+			while (SDL_PollEvent(&e) != 0)
+			{
+				
+				if (e.type == SDL_KEYDOWN)
+				{
 
+					switch (e.key.keysym.sym)
+					{
+						case SDLK_e:
+							comeco = true;
+							break;
+
+						case SDLK_DOWN:
+							menu = menu + 1;
+							break;
+
+						case SDLK_UP:
+							menu = menu - 1;
+							break;
+					}
+				}
+				switch (menu)
+				{
+				case 1:
+					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+					menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+					break;
+
+				case 2:
+					menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+					menuSelecao.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+					break;
+
+				case 3:
+					menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+					menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+					break;
+				case 4:
+					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+					menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+					menu = 1;
+					break;
+				}
+			}
+			SDL_RenderPresent(gRenderizador);
+		}
+		
 		// Looping responsável por ler os eventos, que termina apenas quando a quantidade de eventos
 		// acumulados seja igual a 0
 		while (SDL_PollEvent(&e) != 0)
 		{
 			// Caso o evento lido seja o apertar do botão Fechar, a variável sair recebe true
 			// e o looping principal é finalizado
-			if (e.type == SDL_QUIT)
+			if (e.type == SDL_QUIT || menu == 3)
 			{
 				sair = true;
 			}
+			
+			
 			nave.avaliarEventos(e);
 			nave.avaliarEventosLaser(e);
 			if (gameover == true && e.type == SDL_KEYUP && e.key.repeat == 0 && e.key.keysym.sym == SDLK_r)
@@ -1571,7 +1669,7 @@ int main(int argc, char* args[])
 			inimigo02[1].renderizar();
 
 			BossDisparo.renderizar();
-			
+
 			BossInimigo.renderizar();
 
 		}
