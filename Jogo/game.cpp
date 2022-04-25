@@ -1511,8 +1511,8 @@ int main(int argc, char* args[])
 	cronometro timerDisparo;
 	cronometro intervaloEntreDisparos;
 	// Enquanto sair for o que ele não é  
-	
-	
+
+
 	while (!sair)
 	{
 		while (!comeco)
@@ -1520,47 +1520,41 @@ int main(int argc, char* args[])
 			menuSelecao.setColor(0, 0, 255);
 			while (SDL_PollEvent(&e) != 0)
 			{
-				
+				menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+				menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+				menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 				if (e.type == SDL_KEYDOWN)
 				{
 
 					switch (e.key.keysym.sym)
 					{
-						case SDLK_e:
-							comeco = true;
-							break;
+					case SDLK_e:
+						comeco = true;
+						break;
 
-						case SDLK_DOWN:
-							menu = menu + 1;
-							break;
+					case SDLK_DOWN:
+						menu = menu + 1;
+						break;
 
-						case SDLK_UP:
-							menu = menu - 1;
-							break;
+					case SDLK_UP:
+						menu = menu - 1;
+						break;
 					}
 				}
 				switch (menu)
 				{
 				case 1:
-					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
-					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 					menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
 					break;
 
 				case 2:
-					menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
-					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 					menuSelecao.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
 					break;
 
 				case 3:
-					menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
-					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
 					menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 					break;
 				case 4:
-					menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
-					menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 					menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
 					menu = 1;
 					break;
@@ -1568,7 +1562,7 @@ int main(int argc, char* args[])
 			}
 			SDL_RenderPresent(gRenderizador);
 		}
-		
+
 		// Looping responsável por ler os eventos, que termina apenas quando a quantidade de eventos
 		// acumulados seja igual a 0
 		while (SDL_PollEvent(&e) != 0)
@@ -1579,8 +1573,8 @@ int main(int argc, char* args[])
 			{
 				sair = true;
 			}
-			
-			
+
+
 			nave.avaliarEventos(e);
 			nave.avaliarEventosLaser(e);
 			if (gameover == true && e.type == SDL_KEYUP && e.key.repeat == 0 && e.key.keysym.sym == SDLK_r)
