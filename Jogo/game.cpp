@@ -1500,6 +1500,7 @@ int main(int argc, char* args[])
 	bool momentoDaFase = true;
 	bool gameover = false;
 	bool menu = false;
+	bool recemIniciado = true;
 	Uint32 tempoParaOBoss = 5000;
 	Uint32 tempoParaDisparo = 5000;
 	Uint32 tempoParaDisparo2 = 2000;
@@ -1507,10 +1508,9 @@ int main(int argc, char* args[])
 	int deslocamentoBackground = 0;
 	int escolha = 1;
 	cronometro timerBoss;
-	timerBoss.comecar();
 	cronometro timerDisparo;
 	cronometro intervaloEntreDisparos;
-	// Enquanto sair for o que ele não é  
+	// Enquanto sair for o que ele não 
 
 
 	while (!sair)
@@ -1530,14 +1530,26 @@ int main(int argc, char* args[])
 					{
 					case SDLK_e:
 						menu = true;
+						if ((escolha == 1 && recemIniciado == true) || escolha == 0 || escolha == 3)
+						{
+							timerBoss.comecar();
+						}
 						break;
 
 					case SDLK_DOWN:
 						escolha = escolha + 1;
+						if (recemIniciado == true)
+						{
+							recemIniciado == false;
+						}
 						break;
 
 					case SDLK_UP:
 						escolha = escolha - 1;
+						if (recemIniciado == true)
+						{
+							recemIniciado == false;
+						}
 						break;
 					}
 				}
@@ -1570,7 +1582,7 @@ int main(int argc, char* args[])
 		switch (escolha)
 		{
 			case 1:
-				
+
 				// Looping responsável por ler os eventos, que termina apenas quando a quantidade de eventos
 				// acumulados seja igual a 0
 				while (SDL_PollEvent(&e) != 0)
