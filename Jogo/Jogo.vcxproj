@@ -21,6 +21,14 @@
   <ItemGroup>
     <ClCompile Include="game.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClassDeclaracao.h" />
+    <ClInclude Include="ClassDefinicao.h" />
+    <ClInclude Include="constantes.h" />
+    <ClInclude Include="FuncaoDeclaracao.h" />
+    <ClInclude Include="FuncaoDefinicao.h" />
+    <ClInclude Include="Objetos.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
