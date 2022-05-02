@@ -1,4 +1,5 @@
 #pragma once
+#include<iostream>
 #include<SDL.h>
 #include<SDL_image.h>
 #include"constantes.h"
@@ -138,7 +139,7 @@ void ondaInimigos01(bool flag)
 	}
 }
 
-void ondaInimigos02(bool flag)
+void ondaInimigos02(bool flag) 
 {
 	int indiceInimigo = rand() % quantInimigos02;
 	if (flag == true)
@@ -170,5 +171,153 @@ void reiniciarFase()
 	for (int i = 0; i < quantProjetilBoss02; i++)
 	{
 		BossProjetil02[i].redefinir();
+	}
+}
+
+bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
+{
+	bool sair = true;
+	bool momentoDaFase = true;
+	bool gameover = false;
+	Uint32 tempoParaOBoss = 20000;
+	Uint32 tempoParaDisparo = 5000;
+	Uint32 tempoParaDisparo2 = 2000;
+	int deslocamentoBackground = 0;
+	SDL_Event e;
+	cronometro timerBoss;
+	cronometro timerDisparo;
+	cronometro intervaloEntreDisparos;
+
+
+	for (int i = 0; i < quantInimigos01; i++)
+	{
+		inimigo01[i].HPdefinido = HPinimigo01;
+	}
+	for (int i = 0; i < quantInimigos02; i++)
+	{
+		inimigo02[i].HPdefinido = HPinimigo02;
+	}
+	*BossInimigo.ponteiroHP = HPBoss;
+
+	if (iniciar == true)
+	{
+		sair = false;
+		timerBoss.comecar();
+	}
+
+	while (sair==false)
+	{
+		while (SDL_PollEvent(&e) != 0)
+		{
+			// Caso o evento lido seja o apertar do botão Fechar, a variável sair recebe true
+			// e o looping principal é finalizado
+			if (e.type == SDL_QUIT)
+			{
+				sair = true;
+				return false;
+			}
+			nave.avaliarEventos(e);
+			nave.avaliarEventosLaser(e);
+		}
+		if (gameover == false)
+		{
+			if (timerBoss.getTempo() > tempoParaOBoss)
+			{
+				momentoDaFase = false;
+				BossInimigo.aparecer = true;
+				timerBoss.parar();
+				timerDisparo.comecar();
+				intervaloEntreDisparos.comecar();
+			}
+
+			if (timerDisparo.getTempo() > tempoParaDisparo && BossInimigo.morto == false)
+			{
+				BossDisparo.disparado = true;
+				timerDisparo.parar();
+				timerDisparo.comecar();
+			}
+
+			nave.move();
+			nave.avaliarColisao();
+
+			deslocamentoBackground -= 1;
+			if (deslocamentoBackground < background.getLargura() * -1)
+			{
+				deslocamentoBackground = 0;
+			}
+
+			for (int i = 0; i < quantInimigos01; i++)
+			{
+				ondaInimigos01(momentoDaFase);
+			}
+
+			for (int i = 0; i < quantInimigos02; i++)
+			{
+				ondaInimigos02(momentoDaFase);
+			}
+
+			for (int i = 0; i < quantInimigos01; i++)
+			{
+				inimigo01[i].move();
+			}
+
+			inimigo02[0].move1();
+			inimigo02[1].move2();
+
+			for (int i = 0; i < quantLaser; i++)
+			{
+				laser[i].move();
+				laser[i].avaliaColisao();
+			}
+
+			BossDisparo.move();
+
+			BossProjetil02[0].definePosicao();
+			BossProjetil02[0].move();
+
+			SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderClear(gRenderizador);
+
+			background.renderizar(deslocamentoBackground, 0);
+			background.renderizar(deslocamentoBackground + background.getLargura(), 0);
+
+			nave.renderizar();
+
+			for (int i = 0; i < quantLaser; i++)
+			{
+				laser[i].renderizar();
+			}
+
+
+			for (int i = 0; i < quantInimigos01; i++)
+			{
+				inimigo01[i].renderizar();
+			}
+
+			inimigo02[0].renderizar();
+			inimigo02[1].renderizar();
+
+			BossDisparo.renderizar();
+
+			BossInimigo.renderizar();
+
+			BossProjetil02[0].renderizar();
+
+		}
+
+		SDL_RenderPresent(gRenderizador);
+		if (nave.getHP() <= 0)
+		{
+			sair = true;
+			std::cout << "false";
+			return false;
+		}
+		if (BossInimigo.getHP() <= 0)
+		{
+			sair = true;
+			reiniciarFase();
+			std::cout << "true";
+			return true;
+		}
 	}
 }

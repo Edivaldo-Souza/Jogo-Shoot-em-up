@@ -1,5 +1,6 @@
 ﻿  game.cpp
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\constantes.h(2,10): warning C4067: tokens inesperados após diretiva de pré-processador - esperado um newline
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(62,22): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(70,22): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(57,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(65,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(323): warning C4715: 'iniciarFase': nem todos os caminhos de controle retornam um valor
   Jogo.vcxproj -> C:\Users\loja\Desktop\Jogo Projeto\Game C++\x64\Debug\Jogo.exe

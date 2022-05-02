@@ -139,6 +139,7 @@ public:
 	static const int larProjetil = 41;
 	static const int altProjetil = 24;
 	static const int velocidadeProjetil = 15;
+	const int DANO = 1;
 
 	SDL_Rect* ponteiroCaixaDeColisao = &caixaDeColisao;
 	// a variável disparado é uma flag que indica quando o projetil deve mover ou não
@@ -186,6 +187,10 @@ public:
 	// velocidade no eixo y do inimigo
 	const int velocidadeEixoY = 1;
 
+	int HPdefinido = 1;
+
+	int* ponteiroHP = &HPmutavel;
+
 	// flag que decide quando a textura do inimigo deve se mover e ser renderizada
 	bool morto = true;
 
@@ -212,6 +217,9 @@ public:
 	// retorna a caixa de colisão do inimigo
 	SDL_Rect getCaixaDeColisao();
 private:
+
+	int HPmutavel;
+	
 	// Posição em X do inimigo
 	int posX;
 
@@ -233,6 +241,10 @@ public:
 
 	const int velocidadeEixoY = 6;
 
+	int HPdefinido = 1;
+
+	int* ponteiroHP = &HPmutavel;
+
 	bool morto = true;
 
 	objInimigo02();
@@ -253,6 +265,9 @@ public:
 	SDL_Rect getCaixaDeColisao();
 
 private:
+	
+	int HPmutavel;
+
 	int posX;
 
 	int posY;
@@ -272,12 +287,14 @@ public:
 		altCanhao = 40,
 	};
 	SDL_Rect* ponteiroCaixaDeColisao = caixasDeColisao;
+	int* ponteiroHP = &HP;
 	bool aparecer = false;
 	bool morto = true;
 	objBoss();
 	void redefinir();
 	void definirCaixasDeColisao();
 	void renderizar();
+	int getHP();
 private:
 	int posXBoss;
 	int posYBoss;
@@ -333,5 +350,6 @@ private:
 	int posX02;
 	int posY02;
 	int posYAlvo;
+	int posXAlvo;
 	SDL_Rect caixaDeColisao[quantCaixasDeColisao];
 };

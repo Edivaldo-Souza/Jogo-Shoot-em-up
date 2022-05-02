@@ -1,6 +1,7 @@
 #pragma once
 #include<SDL.h>
 #include<SDL_image.h>
+#include<iostream>
 #include"ClassDeclaracao.h"
 #include"FuncaoDeclaracao.h"
 #include"constantes.h"
@@ -354,7 +355,11 @@ void objProjetilLaser::avaliaColisao()
 	{
 		if (verificaColisao(caixaDeColisao, inimigo01[i].getCaixaDeColisao()) == true && disparado == true)
 		{
-			inimigo01[i].definePosicao();
+			*inimigo01[i].ponteiroHP -= DANO;
+			if (*inimigo01[i].ponteiroHP <= 0)
+			{
+				inimigo01[i].definePosicao();
+			}
 			disparado = false;
 		}
 	}
@@ -362,8 +367,27 @@ void objProjetilLaser::avaliaColisao()
 	{
 		if (verificaColisao(caixaDeColisao, inimigo02[i].getCaixaDeColisao()) == true && disparado == true)
 		{
-			inimigo02[i].definePosicao();
+			*inimigo02[i].ponteiroHP -= DANO;
+			if (*inimigo02[i].ponteiroHP <= 0)
+			{
+				inimigo02[i].definePosicao();
+			}
 			disparado = false;
+		}
+	}
+	for (int i = 0; i < BossInimigo.totalDeCaixas; i++)
+	{
+		if (verificaColisao(caixaDeColisao, BossInimigo.ponteiroCaixaDeColisao[i]) == true && disparado == true && BossInimigo.morto == false)
+		{
+			if (i == 0 || i == 1)
+			{
+				*BossInimigo.ponteiroHP = *BossInimigo.ponteiroHP - DANO;
+				disparado = false;
+			}
+			else
+			{
+				disparado = false;
+			}
 		}
 	}
 }
@@ -398,6 +422,7 @@ SDL_Rect objProjetilLaser::getCaixaDeColisao()
 // Define valores para as variáveis da classe
 objInimigo01::objInimigo01()
 {
+	HPmutavel = HPdefinido;
 	posX = larJanela;
 	posY = rand() % ((altJanela - altInimigo) + 1);
 	caixaDeColisao.x = posX;
@@ -408,6 +433,7 @@ objInimigo01::objInimigo01()
 
 void objInimigo01::definePosicao()
 {
+	HPmutavel = HPdefinido;
 	posX = larJanela;
 	posY = rand() % ((altJanela - altInimigo) + 1);
 	caixaDeColisao.x = posX;
@@ -465,6 +491,7 @@ SDL_Rect objInimigo01::getCaixaDeColisao()
 
 objInimigo02::objInimigo02()
 {
+	HPmutavel = HPdefinido;
 	posX = larJanela;
 	posY = altJanela / 2;
 	caixaDeColisao.x = posX;
@@ -475,6 +502,7 @@ objInimigo02::objInimigo02()
 
 void objInimigo02::definePosicao()
 {
+	HPmutavel = HPdefinido;
 	posX = larJanela;
 	posY = altJanela / 2;
 	caixaDeColisao.x = posX;
@@ -651,6 +679,11 @@ void objBoss::renderizar()
 	}
 }
 
+int objBoss::getHP()
+{
+	return HP;
+}
+
 objProjetilBoss::objProjetilBoss()
 {
 	posX = larJanela - 250;
@@ -715,6 +748,7 @@ objProjetilBoss02::objProjetilBoss02()
 	posX02 = 0;
 	posY02 = 0;
 	posYAlvo = 0;
+	posXAlvo = 0;
 	for (int i = 0; i < quantCaixasDeColisao; i++)
 	{
 		caixaDeColisao[i].x = 0;
@@ -739,49 +773,45 @@ void objProjetilBoss02::definePosicao()
 		caixaDeColisao[1].x = posX02;
 		caixaDeColisao[1].y = posY02;
 		disparado2 = true;
-		if (nave.getPosY() > posY01)
+		
+		posXAlvo = nave.getPosX() + nave.getLargura()/2;
+		posYAlvo = nave.getPosY() + nave.getAltura()/2;
+		if (posYAlvo > posY01)
 		{
 			sentidoProjetil1 = true;
 		}
-		else
-		{
-			sentidoProjetil1 = false;
-		}
-		if (nave.getPosY() > posY02)
+		if (posYAlvo > posY02)
 		{
 			sentidoProjetil2 = true;
-		}
-		else
-		{
-			sentidoProjetil2 = false;
 		}
 	}
 }
 
 void objProjetilBoss02::move()
 {
-	if (sentidoProjetil1 == true)
+	if ((posYAlvo > posY01 || posXAlvo < posX01) && sentidoProjetil1 == true)
 	{
-		posY01 += velocidadeProjetil;
+	
+		posY01 += 3;
 		posX01 -= velocidadeProjetil;
 	}
 	else
 	{
-		posY01 -= velocidadeProjetil;
+		posY01 -= 3;
 		posX01 -= velocidadeProjetil;
 	}
 	if (posX01 < larProjetil * -1 || posY01 > larJanela + larProjetil || posY01 < larProjetil * -1)
 	{
 		disparado1 = false;
 	}
-	if (sentidoProjetil2 == true)
+	if ((posYAlvo > posY02 || posXAlvo < posX02) && sentidoProjetil2 == true)
 	{
-		posY02 += velocidadeProjetil;
+		posY02 += 3;
 		posX02 -= velocidadeProjetil;
 	}
-	else
+	else 
 	{
-		posY02 -= velocidadeProjetil;
+		posY02 -= 3;
 		posX02 -= velocidadeProjetil;
 	}
 	if (posX02 < larProjetil * -1 || posY02 > larJanela + larProjetil || posY02 < larProjetil * -1)
@@ -886,3 +916,5 @@ bool cronometro::foiPausado()
 {
 	return pausado;
 }
+
+
