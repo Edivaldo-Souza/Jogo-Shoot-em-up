@@ -7,36 +7,36 @@ class LTextura
 {
 public:
 
-	// funÁ„o que atribui os valores inicias as vari·veis da classe
+	// fun√ß√£o que atribui os valores inicias as vari√°veis da classe
 	LTextura();
 
-	// funÁ„o que redefine os valores das vari·veis da classe para como iniciamente foram definidas em LTextura()
+	// fun√ß√£o que redefine os valores das vari√°veis da classe para como iniciamente foram definidas em LTextura()
 	~LTextura();
 
-	// funÁ„o que recebe uma string correspondente ao caminho(nome_da_pasta/imagem.png) da imagem a ser definida como textura 
+	// fun√ß√£o que recebe uma string correspondente ao caminho(nome_da_pasta/imagem.png) da imagem a ser definida como textura 
 	bool loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b);
 
-	// funÁ„o que apaga a textura mas recente carregada, e redifine suas dimensıes para o valor de 0 
+	// fun√ß√£o que apaga a textura mas recente carregada, e redifine suas dimens√µes para o valor de 0 
 	void free();
 
-	// funÁao para realizar a modulaÁ„o das cores de uma textura 
+	// fun√ßao para realizar a modula√ß√£o das cores de uma textura 
 	void setColor(Uint8 r, Uint8 g, Uint8 b);
 
-	// funÁ„o que renderiza uma textura na janela recebendo sua posiÁ„o(x,y), um SDL_Rect para o caso
-	// de ser necess·rio renderizar apenas uma parcela da imagem carregada, um ‚ngulo de rotaÁ„o,
-	// um SDL_Point para definir um ponto de referÍncia para a rotaÁ„o, e um SDL_RendererFlip para
-	// espelhar sua posiÁ„o na vertical e horizontal.
+	// fun√ß√£o que renderiza uma textura na janela recebendo sua posi√ß√£o(x,y), um SDL_Rect para o caso
+	// de ser necess√°rio renderizar apenas uma parcela da imagem carregada, um √¢ngulo de rota√ß√£o,
+	// um SDL_Point para definir um ponto de refer√™ncia para a rota√ß√£o, e um SDL_RendererFlip para
+	// espelhar sua posi√ß√£o na vertical e horizontal.
 	void renderizar(int x, int y, SDL_Rect* clip = NULL, double angulo = 0.0, SDL_Point* centro = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-	// funÁ„o que retorna a vari·vel mLargura;
+	// fun√ß√£o que retorna a vari√°vel mLargura;
 	int getLargura();
 
-	// funÁ„o que retorna a vari·vel mAltura;
+	// fun√ß√£o que retorna a vari√°vel mAltura;
 	int getAltura();
 
 private:
 
-	// Vari·vel que recebe a textura para os objetos da classe LTextura
+	// Vari√°vel que recebe a textura para os objetos da classe LTextura
 	SDL_Texture* mTextura;
 
 	// inteiro que recebe a largura da textura
@@ -68,71 +68,71 @@ private:
 class objJogador
 {
 public:
-	// declaraÁ„o da constante referente a largura da textura do jogador 
+	// declara√ß√£o da constante referente a largura da textura do jogador 
 	static const int larJogador = 40;
 
-	// declaraÁ„o da constante referente a altura da textura do jogador
+	// declara√ß√£o da constante referente a altura da textura do jogador
 	static const int altJogador = 43;
 
-	// declaraÁ„o da constante referente a quantidade de pixels que a textura do jogador se desloca
+	// declara√ß√£o da constante referente a quantidade de pixels que a textura do jogador se desloca
 	// por apertar de tecla.
 	static const int deslocamento = 5;
 
 	Uint32 tempoImortal = 1000;
 
-	// funÁ„o que atribui os valores iniciais as vari·veis desta classe
+	// fun√ß√£o que atribui os valores iniciais as vari√°veis desta classe
 	objJogador();
 
-	// funÁ„o que recebe como par‚metro eventos (apertar de teclas) e define qual o sentido do
+	// fun√ß√£o que recebe como par√¢metro eventos (apertar de teclas) e define qual o sentido do
 	// deslocamento da textura do jogador ao somar ou subtrair a constante deslocamento
-	// a vari·vel mVelY, a qual ser· somada a posiÁ„o da textura pela funÁ„o move()
+	// a vari√°vel mVelY, a qual ser√° somada a posi√ß√£o da textura pela fun√ß√£o move()
 	void avaliarEventos(SDL_Event& e);
 
-	// funÁ„o que recebe como par‚metro eventos (tecla SPACE) e define quando um projetil deve ser disparado
+	// fun√ß√£o que recebe como par√¢metro eventos (tecla SPACE) e define quando um projetil deve ser disparado
 	void avaliarEventosLaser(SDL_Event& e);
 
 	void avaliarColisao();
 
 	void redefinir();
 
-	// funÁ„o que altera a posiÁ„o Y da textura do jogador com base no sinal(sentido) da vari·vel mVelY
+	// fun√ß√£o que altera a posi√ß√£o Y da textura do jogador com base no sinal(sentido) da vari√°vel mVelY
 	void move();
 
-	// funÁ„o que renderiza a textura do jogador
+	// fun√ß√£o que renderiza a textura do jogador
 	void renderizar();
 
-	// funÁ„o que retorna o valor da altura da textura do jogador
+	// fun√ß√£o que retorna o valor da altura da textura do jogador
 	int getAltura();
 
-	// funÁ„o que retorna o valor da largura da textura do jogador
+	// fun√ß√£o que retorna o valor da largura da textura do jogador
 	int getLargura();
 
-	// funÁ„o que retorna a posiÁ„o Y da textura do jogador
+	// fun√ß√£o que retorna a posi√ß√£o Y da textura do jogador
 	int getPosY();
 
 	int getHP();
 
-	// funÁ„o que retorna a posiÁ„o X da textura do jogador
+	// fun√ß√£o que retorna a posi√ß√£o X da textura do jogador
 	int getPosX();
 
-	// funÁ„o que retorna a caixa de colis„o do jogador
+	// fun√ß√£o que retorna a caixa de colis√£o do jogador
 	SDL_Rect getCaixaDeColisao();
 
 private:
-	// inteiros correspondentes as posiÁıes X e Y da textura do jogador
+	// inteiros correspondentes as posi√ß√µes X e Y da textura do jogador
 	int mPosY, mPosX;
 
 	// inteiros correspondentes ao sentido do deslocamento da textura do jogador
 	int mVelY, mVelX;
 
 	int HP;
-	// Caixa de colis„o do jogador
+	// Caixa de colis√£o do jogador
 	SDL_Rect caixaDeColisao;
 
 	cronometro tempoInvencibilidade;
 };
 
-// classe que define o tipo ProjÈtil
+// classe que define o tipo Proj√©til
 class objProjetilLaser
 {
 public:
@@ -142,31 +142,31 @@ public:
 	const int DANO = 1;
 
 	SDL_Rect* ponteiroCaixaDeColisao = &caixaDeColisao;
-	// a vari·vel disparado È uma flag que indica quando o projetil deve mover ou n„o
-	// a vari‡vel "atualizaPosicaoDePartida" È uma flag que indica quando o projÈtil deve atualizar sua posiÁ„o de partida
+	// a vari√°vel disparado √© uma flag que indica quando o projetil deve mover ou n√£o
+	// a vari√†vel "atualizaPosicaoDePartida" √© uma flag que indica quando o proj√©til deve atualizar sua posi√ß√£o de partida
 	bool atualizaPosicaoDePartida = false;
 
 	bool disparado = false;
 
-	// funÁ„o que define valores padrıes para as vari·veis do tipo objProjetil
+	// fun√ß√£o que define valores padr√µes para as vari√°veis do tipo objProjetil
 	objProjetilLaser();
 
 	void avaliaColisao();
 
 	void redefinir();
 
-	// mÈtodo respons·vel por modificar a posiÁ„o X de um objProjetil fazendo com que este se mova  
+	// m√©todo respons√°vel por modificar a posi√ß√£o X de um objProjetil fazendo com que este se mova  
 	void move();
 
-	// renderiza a textura do projÈtil na tela
+	// renderiza a textura do proj√©til na tela
 	void renderizar();
 
-	// FunÁ„o que retorna a caixa de colis„o do projetil
+	// Fun√ß√£o que retorna a caixa de colis√£o do projetil
 	SDL_Rect getCaixaDeColisao();
 private:
-	// inteiro correspondente a posiÁ„o X do projÈtil
+	// inteiro correspondente a posi√ß√£o X do proj√©til
 	int posX;
-	// inteiro correspondente a posiÁ„o Y do projÈtil
+	// inteiro correspondente a posi√ß√£o Y do proj√©til
 	int posY;
 	SDL_Rect caixaDeColisao;
 };
@@ -194,8 +194,10 @@ public:
 	// flag que decide quando a textura do inimigo deve se mover e ser renderizada
 	bool morto = true;
 
-	// define valores para as vari·veis da classe
+	// define valores para as vari√°veis da classe
 	objInimigo01();
+
+	bool avaliaColisao();
 
 	// move o inimigo
 	void move();
@@ -211,22 +213,24 @@ public:
 	// retorn a largura do inimigo
 	int getLargura();
 
-	// retorn a posiÁ„o em X do inimigo
+	// retorn a posi√ß√£o em X do inimigo
 	int getPosX();
 
-	// retorna a caixa de colis„o do inimigo
+	int getPosY();
+
+	// retorna a caixa de colis√£o do inimigo
 	SDL_Rect getCaixaDeColisao();
 private:
 
 	int HPmutavel;
 	
-	// PosiÁ„o em X do inimigo
+	// Posi√ß√£o em X do inimigo
 	int posX;
 
-	// PosiÁ„o em Y do inimigo
+	// Posi√ß√£o em Y do inimigo
 	int posY;
 
-	// Caixa de colis„o do inimigo
+	// Caixa de colis√£o do inimigo
 	SDL_Rect caixaDeColisao;
 };
 
@@ -275,6 +279,7 @@ private:
 	SDL_Rect caixaDeColisao;
 };
 
+
 class objBoss
 {
 public:
@@ -305,8 +310,8 @@ private:
 class objProjetilBoss
 {
 public:
-	static const int larProjetil = 190;
-	static const int altProjetil = 70;
+	static const int larProjetil = 83;
+	static const int altProjetil = 35;
 	static const int velocidadeProjetil = 8;
 
 	bool disparado = false;
