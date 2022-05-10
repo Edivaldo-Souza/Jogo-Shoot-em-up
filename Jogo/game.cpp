@@ -95,8 +95,8 @@ int main(int argc, char* args[])
 	{
 			case 1:
 				
-				fase02 = iniciarFase(fase01,1,1,20);
-				fase03 = iniciarFase(fase02,3,1,40);
+				fase02 = iniciarFase(fase01,1,1,20,0.0005);
+				fase03 = iniciarFase(fase02,3,1,40,0.0008);
 
 				break;
 

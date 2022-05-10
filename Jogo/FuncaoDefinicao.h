@@ -6,14 +6,14 @@
 #include"FuncaoDeclaracao.h"
 #include"Objetos.h"
 
-// FunÁ„o respons·vel pela inicializaÁ„o da biblioteca SDL
+// Fun√ß√£o respons√°vel pela inicializa√ß√£o da biblioteca SDL
 bool init()
 {
-	// InicializaÁ„o da biblioteca SDL
+	// Inicializa√ß√£o da biblioteca SDL
 	SDL_Init(SDL_INIT_VIDEO);
-	// CriaÁ„o da Janela
+	// Cria√ß√£o da Janela
 	gJanela = SDL_CreateWindow("Jogo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, larJanela, altJanela, SDL_WINDOW_SHOWN);
-	// CriaÁ„o do renderizador
+	// Cria√ß√£o do renderizador
 	gRenderizador = SDL_CreateRenderer(gJanela, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 	IMG_Init(IMG_INIT_PNG);
@@ -22,49 +22,120 @@ bool init()
 
 bool loadMedia()
 {
-	naveSpriteSheet.loadFromFile("spritesheets/STRIP-1.gif", 0xFF, 0xFF, 0xFF);
-	projeteisSpriteSheet.loadFromFile("spritesheets_2/projetil_Laser.png", 0xFF, 0, 0xFF);
-	inimigo01SpriteSheet.loadFromFile("spritesInimigos/inimigo01.png", 0xFF, 0, 0xFF);
-	background.loadFromFile("background/background.png", 0xFF, 0, 0);
+	naveSpriteSheet.loadFromFile("spritesheets/spaceships.png", 0xFF, 0xFF, 0xFF);
+	propulsorSpriteSheet.loadFromFile("spritesheets_2/Thruster_04.png", 0xFF, 0xFF, 0xFF);
+	projeteisSpriteSheet.loadFromFile("spritesheets_2/Fx_012.png", 0xFF, 0, 0xFF);
+	inimigo01SpriteSheet.loadFromFile("spritesheets/Spaceships.png", 0xFF, 0, 0xFF);
+	explosaoSpriteSheet.loadFromFile("spritesheets_2/explosion.png", 0xFF, 0, 0xFF);
+	background[0].loadFromFile("background/background.png", 0xFF, 0, 0);
+	background[1].loadFromFile("background/Surface_Layer3.png", 0xFF, 0, 0);
+	background[2].loadFromFile("background/Surface_Layer4.png", 0xFF, 0, 0);
+	background[3].loadFromFile("background/Surface_Layer1.png", 0xFF, 0, 0);
+	background[4].loadFromFile("background/asteroide1.png", 0xFF, 0, 0);
+	background[5].loadFromFile("background/asteroide2.png", 0xFF, 0, 0);
+	background[6].loadFromFile("background/asteroide3.png", 0xFF, 0, 0);
+	background[7].loadFromFile("background/asteroide4.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
+	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
 	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
 	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
 
-	// DefiniÁ„o dos par‚metros da SDL_Rect que armazenar· certa porÁ„o da textura com os sprites da nave 
-	naveClipParado[0].x = 1;
-	naveClipParado[0].y = 1;
-	naveClipParado[0].w = 46;
-	naveClipParado[0].h = 44;
-	// DefiniÁ„o dos par‚metros da SDL_Rect que armazenar· certa porÁ„o da textura com os sprites dos projÈteis
-	laserClip[0].x = 1;
-	laserClip[0].y = 1;
-	laserClip[0].w = 24;
-	laserClip[0].h = 41;
-	// DeclaraÁ„o dos par‚metros da SDL_Rect que armazenar· certa porÁ„o da textura com os sprites do inimigo01
-	inimigo01Clip[0].x = 1;
-	inimigo01Clip[0].y = 1;
-	inimigo01Clip[0].w = 45;
-	inimigo01Clip[0].h = 43;
+	// Defini√ß√£o dos par√¢metros da SDL_Rect que armazenar√° certa por√ß√£o da textura com os sprites da nave 
+	naveClipParado[0].x = 256;
+	naveClipParado[0].y = 128;
+	naveClipParado[0].w = 64;
+	naveClipParado[0].h = 64;
 
-	inimigo01Clip[1].x = 45;
-	inimigo01Clip[1].y = 1;
-	inimigo01Clip[1].w = 37;
-	inimigo01Clip[1].h = 45;
+	PropulsorClip[0].x = 0;
+	PropulsorClip[0].y = 0;
+	PropulsorClip[0].w = 32;
+	PropulsorClip[0].h = 32;
+
+	PropulsorClip[1].x = 0;
+	PropulsorClip[1].y = 0;
+	PropulsorClip[1].w = 32;
+	PropulsorClip[1].h = 32;
+
+	PropulsorClip[2].x = 32;
+	PropulsorClip[2].y = 0;
+	PropulsorClip[2].w = 32;
+	PropulsorClip[2].h = 32;
+
+	PropulsorClip[3].x = 32;
+	PropulsorClip[3].y = 0;
+	PropulsorClip[3].w = 32;
+	PropulsorClip[3].h = 32;
+
+	// Defini√ß√£o dos par√¢metros da SDL_Rect que armazenar√° certa por√ß√£o da textura com os sprites dos proj√©teis
+	laserClip[0].x = 64;
+	laserClip[0].y = 1;
+	laserClip[0].w = 32;
+	laserClip[0].h = 32;
+	// Declara√ß√£o dos par√¢metros da SDL_Rect que armazenar√° certa por√ß√£o da textura com os sprites do inimigo01
+	inimigo01Clip[0].x = 125;
+	inimigo01Clip[0].y = 70;
+	inimigo01Clip[0].w = 65;
+	inimigo01Clip[0].h = 61;
+
+	inimigo01Clip[1].x = 190;
+	inimigo01Clip[1].y = 70;
+	inimigo01Clip[1].w = 65;
+	inimigo01Clip[1].h = 61;
+
+	explosaoclip[0].x = 0;
+	explosaoclip[0].y = 0;
+	explosaoclip[0].w = 32;
+	explosaoclip[0].h = 32;
+
+	explosaoclip[1].x = 32;
+	explosaoclip[1].y = 0;
+	explosaoclip[1].w = 32;
+	explosaoclip[1].h = 32;
+
+	explosaoclip[2].x = 64;
+	explosaoclip[2].y = 0;
+	explosaoclip[2].w = 32;
+	explosaoclip[2].h = 32;
+
+	explosaoclip[3].x = 96;
+	explosaoclip[3].y = 0;
+	explosaoclip[3].w = 32;
+	explosaoclip[3].h = 32;
+
+	explosaoclip[4].x = 128;
+	explosaoclip[4].y = 0;
+	explosaoclip[4].w = 32;
+	explosaoclip[4].h = 32;
+
+	explosaoclip[5].x= 160;
+	explosaoclip[5].y = 0;
+	explosaoclip[5].w = 32;
+	explosaoclip[5].h = 32;
+
+	explosaoclip[6].x = 192;
+	explosaoclip[6].y = 0;
+	explosaoclip[6].w = 32;
+	explosaoclip[6].h = 32;
+
+	explosaoclip[7].x = 224;
+	explosaoclip[7].y = 0;
+	explosaoclip[7].w = 32;
+	explosaoclip[7].h = 32;	
 
 	BossClip.x = 0;
 	BossClip.y = 0;
 	BossClip.w = 180;
 	BossClip.h = 410;
 
-	BossProjetilClip[0].x = 18;
-	BossProjetilClip[0].y = 414;
-	BossProjetilClip[0].w = 201;
-	BossProjetilClip[0].h = 70;
+	BossProjetilClip[0].x = 210;
+	BossProjetilClip[0].y = 305;
+	BossProjetilClip[0].w = 35;
+	BossProjetilClip[0].h = 83;
 
 	BossProjetilClip[1].x = 0;
-	BossProjetilClip[1].y = 414;
-	BossProjetilClip[1].w = 15;
-	BossProjetilClip[1].h = 14;
+	BossProjetilClip[1].y = 105;
+	BossProjetilClip[1].w = 30;
+	BossProjetilClip[1].h = 35;
 
 	menuInicialClip[0].x = 0;
 	menuInicialClip[0].y = 0;
@@ -87,7 +158,7 @@ bool loadMedia()
 
 void close()
 {
-	// Apaga os valores das vari·veis desse objeto LTextura 
+	// Apaga os valores das vari√°veis desse objeto LTextura 
 	naveSpriteSheet.free();
 	projeteisSpriteSheet.free();
 	inimigo01SpriteSheet.free();
@@ -97,7 +168,7 @@ void close()
 	SDL_DestroyWindow(gJanela);
 	// Desfaz o Renderizador
 	SDL_DestroyRenderer(gRenderizador);
-	// Redifine as vari·veis como vazias
+	// Redifine as vari√°veis como vazias
 	gJanela = NULL;
 	gRenderizador = NULL;
 
@@ -168,27 +239,32 @@ void reiniciarFase()
 	}
 	BossInimigo.redefinir();
 	BossDisparo.redefinir();
-	for (int i = 0; i < quantProjetilBoss02; i++)
-	{
-		BossProjetil02[i].redefinir();
-	}
+	BossProjetil02.redefinir();
 }
 
-bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
+bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo)
 {
 	bool sair = true;
 	bool momentoDaFase = true;
 	bool gameover = false;
-	Uint32 tempoParaOBoss = 20000;
+	Uint32 tempoParaOBoss = 5000;
 	Uint32 tempoParaDisparo = 5000;
-	Uint32 tempoParaDisparo2 = 2000;
+	Uint32 tempoParaEncerramento = 2000;
 	int deslocamentoBackground = 0;
+	int deslocamentoAsteroide = 0;
+	int deslocamentoAsteroide2 = 300;
+	int deslocamentoAsteroide3 = 500;
+	int r1 = 0;
+	int r2 = 0;
+	int r3 = 0;
+	int y1 = 0;
+	int y2 = 0;
+	int y3 = 0;
 	SDL_Event e;
 	cronometro timerBoss;
 	cronometro timerDisparo;
-	cronometro intervaloEntreDisparos;
-
-
+	cronometro timerEncerramento;
+	
 	for (int i = 0; i < quantInimigos01; i++)
 	{
 		inimigo01[i].HPdefinido = HPinimigo01;
@@ -198,6 +274,8 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 		inimigo02[i].HPdefinido = HPinimigo02;
 	}
 	*BossInimigo.ponteiroHP = HPBoss;
+
+	BossProjetil02.velocidade = tempoDisparo;
 
 	if (iniciar == true)
 	{
@@ -209,8 +287,8 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 	{
 		while (SDL_PollEvent(&e) != 0)
 		{
-			// Caso o evento lido seja o apertar do bot„o Fechar, a vari·vel sair recebe true
-			// e o looping principal È finalizado
+			// Caso o evento lido seja o apertar do bot√£o Fechar, a vari√°vel sair recebe true
+			// e o looping principal √© finalizado
 			if (e.type == SDL_QUIT)
 			{
 				sair = true;
@@ -227,7 +305,6 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 				BossInimigo.aparecer = true;
 				timerBoss.parar();
 				timerDisparo.comecar();
-				intervaloEntreDisparos.comecar();
 			}
 
 			if (timerDisparo.getTempo() > tempoParaDisparo && BossInimigo.morto == false)
@@ -241,9 +318,24 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 			nave.avaliarColisao();
 
 			deslocamentoBackground -= 1;
-			if (deslocamentoBackground < background.getLargura() * -1)
+			if (deslocamentoBackground < background[0].getLargura() * -1)
 			{
 				deslocamentoBackground = 0;
+			}
+			deslocamentoAsteroide -= 1;
+			{
+				if (deslocamentoAsteroide < -700)
+					deslocamentoAsteroide = 0;
+			}
+			deslocamentoAsteroide2 -= 1;
+			{
+				if (deslocamentoAsteroide2 < -700)
+					deslocamentoAsteroide2 = 0;
+			}
+			deslocamentoAsteroide3 -= 1;
+			{
+				if (deslocamentoAsteroide3 < -700)
+					deslocamentoAsteroide3 = 0;
 			}
 
 			for (int i = 0; i < quantInimigos01; i++)
@@ -272,22 +364,114 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 
 			BossDisparo.move();
 
-			BossProjetil02[0].definePosicao();
-			BossProjetil02[0].move();
+			BossProjetil02.definePosicao();
+			BossProjetil02.move();
 
 			SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(gRenderizador);
 
-			background.renderizar(deslocamentoBackground, 0);
-			background.renderizar(deslocamentoBackground + background.getLargura(), 0);
+			background[0].renderizar(deslocamentoBackground, 0);
+			background[0].renderizar(deslocamentoBackground + background[0].getLargura(), 0);
 
+			for(int i = 0;i < larJanela;i = i + 128)
+			{
+				background[1].renderizar(deslocamentoBackground+i, 416);
+				background[1].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 416);
+			}
+			
+			for (int i = 0; i < larJanela; i = i + 128)
+			{
+				background[2].renderizar(deslocamentoBackground + i, 352);
+				background[2].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 352);
+			}
+			
+			for (int i = 0; i < larJanela; i = i + 128)
+			{
+				background[3].renderizar(deslocamentoBackground + i, 320);
+				background[3].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 320);
+			}
+
+			if (deslocamentoAsteroide <= -700)
+			{
+				r1 = 1 + rand() % (4 - 1 + 1);
+				y1 = 1 + rand() % (270 - 1 + 1);
+			}
+			
+			if (deslocamentoAsteroide2 <= -700)
+			{
+				r2 = 1 + rand() % (4 - 1 + 1);
+				y2 = 1 + rand() % (270 - 1 + 1);
+			}
+			if (deslocamentoAsteroide3 <= -700)
+			{
+				r3 = 1 + rand() % (4 - 1 + 1);
+				y3 = 1 + rand() % (270 - 1 + 1);
+			}
+			
+			switch(r1)
+			{
+				case 1:
+					background[4].renderizar(deslocamentoAsteroide + larJanela,y1);
+					break;
+				case 2:
+					background[5].renderizar(deslocamentoAsteroide + larJanela, y1);
+					break;
+				case 3:
+					background[6].renderizar(deslocamentoAsteroide + larJanela, y1);
+					break;
+				case 4: 
+					background[7].renderizar(deslocamentoAsteroide + larJanela, y1);
+					break;
+			}
+			switch(r2)
+			{
+			case 1:
+				background[4].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+				break;
+			case 2:
+				background[5].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+				break;
+			case 3:
+				background[6].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+				break;
+			case 4:
+				background[7].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+				break;
+			}
+
+			switch(r3)
+			{
+			case 1:
+				background[4].renderizar(deslocamentoAsteroide3+ larJanela, y3);
+				break;
+			case 2:
+				background[5].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+				break;
+			case 3:
+				background[6].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+				break;
+			case 4:
+				background[7].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+				break;
+			}
+			
 			nave.renderizar();
+
+			SDL_Rect* clipAtual = &PropulsorClip[frame / 4];
+			propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 7, clipAtual, 180);
+			propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 22, clipAtual, 180);
+
+			frame++;
+
+			if (frame/ 4 >= 4)
+			{
+				frame = 0;
+			}
 
 			for (int i = 0; i < quantLaser; i++)
 			{
 				laser[i].renderizar();
 			}
-
 
 			for (int i = 0; i < quantInimigos01; i++)
 			{
@@ -301,7 +485,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss)
 
 			BossInimigo.renderizar();
 
-			BossProjetil02[0].renderizar();
+			BossProjetil02.renderizar();
 
 		}
 

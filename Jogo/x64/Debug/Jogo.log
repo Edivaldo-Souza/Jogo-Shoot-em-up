@@ -1,6 +1,12 @@
 ﻿  game.cpp
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\constantes.h(2,10): warning C4067: tokens inesperados após diretiva de pré-processador - esperado um newline
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(819,28): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(820,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(827,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(828,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(57,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(65,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(323): warning C4715: 'iniciarFase': nem todos os caminhos de controle retornam um valor
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(98,46): warning C4305: 'argumento': truncamento de 'double' para 'float'
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(99,46): warning C4305: 'argumento': truncamento de 'double' para 'float'
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(510): warning C4715: 'iniciarFase': nem todos os caminhos de controle retornam um valor
   Jogo.vcxproj -> C:\Users\loja\Desktop\Jogo Projeto\Game C++\x64\Debug\Jogo.exe
