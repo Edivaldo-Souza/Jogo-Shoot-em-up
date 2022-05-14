@@ -242,6 +242,79 @@ void reiniciarFase()
 	BossProjetil02.redefinir();
 }
 
+int iniciarMenu()
+{
+	bool sair = false;
+	bool menu = false;
+	bool recemIniciado = true;
+	SDL_Event e;
+	int escolha = 1;
+
+	while (!menu)
+	{
+		menuSelecao.setColor(0, 0, 255);
+		while (SDL_PollEvent(&e) != 0)
+		{
+			menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+			menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+			menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+			if (e.type == SDL_QUIT)
+			{
+				menu = true;
+				escolha = 3;
+			}
+			if (e.type == SDL_KEYDOWN)
+			{
+
+				switch (e.key.keysym.sym)
+				{
+				case SDLK_e:
+					menu = true;
+					break;
+
+				case SDLK_DOWN:
+					escolha = escolha + 1;
+					if (recemIniciado == true)
+					{
+						recemIniciado == false;
+					}
+					break;
+
+				case SDLK_UP:
+					escolha = escolha - 1;
+					if (recemIniciado == true)
+					{
+						recemIniciado == false;
+					}
+					break;
+				}
+			}
+			switch (escolha)
+			{
+			case 0:
+				menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+				escolha = 3;
+				break;
+			case 1:
+				menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+				break;
+			case 2:
+				menuSelecao.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+				break;
+			case 3:
+				menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+				break;
+			case 4:
+				menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+				escolha = 1;
+				break;
+			}
+		}
+		SDL_RenderPresent(gRenderizador);
+	}
+	return escolha;
+}
+
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo)
 {
 	bool sair = true;

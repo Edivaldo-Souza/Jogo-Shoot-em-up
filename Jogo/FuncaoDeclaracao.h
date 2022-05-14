@@ -13,4 +13,6 @@ void close();
 // Função que verifica se duas caixas de colisão se cruzaram
 bool verificaColisao(SDL_Rect a, SDL_Rect b);
 
+int iniciarMenu();
+
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo);

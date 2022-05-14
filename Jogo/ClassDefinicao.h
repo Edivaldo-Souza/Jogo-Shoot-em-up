@@ -261,6 +261,15 @@ void objJogador::avaliarColisao()
 				}
 			}
 		}
+		for (int i = 0; i < BossInimigo.totalDeCaixas; i++)
+		{
+			if (verificaColisao(caixaDeColisao, BossInimigo.ponteiroCaixaDeColisao[i]) == true && BossInimigo.morto==false)
+			{
+				HP -= 1;
+				mPosX -= 10;
+				caixaDeColisao.x = mPosX;
+			}
+		}
 	}
 	else if (tempoInvencibilidade.getTempo() > tempoImortal)
 	{

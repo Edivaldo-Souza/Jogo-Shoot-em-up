@@ -72,7 +72,7 @@ public:
 	static const int larJogador = 40;
 
 	// declaração da constante referente a altura da textura do jogador
-	static const int altJogador = 43;
+	static const int altJogador = 40;
 
 	// declaração da constante referente a quantidade de pixels que a textura do jogador se desloca
 	// por apertar de tecla.
