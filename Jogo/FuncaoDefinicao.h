@@ -320,6 +320,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 	bool sair = true;
 	bool momentoDaFase = true;
 	bool gameover = false;
+	bool receberEventos = true;
 	Uint32 tempoParaOBoss = 5000;
 	Uint32 tempoParaDisparo = 5000;
 	Uint32 tempoParaEncerramento = 2000;
@@ -336,7 +337,6 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 	SDL_Event e;
 	cronometro timerBoss;
 	cronometro timerDisparo;
-	cronometro timerEncerramento;
 	
 	for (int i = 0; i < quantInimigos01; i++)
 	{
@@ -358,7 +358,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 
 	while (sair==false)
 	{
-		while (SDL_PollEvent(&e) != 0)
+		while (SDL_PollEvent(&e) != 0 && receberEventos==true)
 		{
 			// Caso o evento lido seja o apertar do botão Fechar, a variável sair recebe true
 			// e o looping principal é finalizado
@@ -569,8 +569,9 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			std::cout << "false";
 			return false;
 		}
-		if (BossInimigo.getHP() <= 0)
+		else if (BossInimigo.getHP() <= 0)
 		{
+			receberEventos = false;
 			sair = true;
 			reiniciarFase();
 			std::cout << "true";

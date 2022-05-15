@@ -281,13 +281,9 @@ void objJogador::redefinir()
 {
 	mPosY = altJanela / 2 - altJogador / 2;
 	mPosX = 10;
-	mVelY = 0;
-	mVelX = 0;
 	HP = 5;
 	caixaDeColisao.x = mPosX;
 	caixaDeColisao.y = mPosY;
-	caixaDeColisao.w = larJogador;
-	caixaDeColisao.h = altJogador;
 }
 
 // função que retorna a lagura da textura do jogador
@@ -328,7 +324,7 @@ SDL_Rect objJogador::getCaixaDeColisao()
 // função que renderiza a textura do jogador
 void objJogador::renderizar()
 {
-	naveSpriteSheet.renderizar(mPosX, mPosY, &naveClipParado[0], 0);
+	naveSpriteSheet.renderizar((int)mPosX,(int)mPosY, &naveClipParado[0], 0);
 }
 
 // função que define os valores de suas variáveis  
