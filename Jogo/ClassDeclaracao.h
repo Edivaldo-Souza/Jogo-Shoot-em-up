@@ -197,8 +197,6 @@ public:
 	// define valores para as variáveis da classe
 	objInimigo01();
 
-	bool avaliaColisao();
-
 	// move o inimigo
 	void move();
 
@@ -264,6 +262,10 @@ public:
 	int getAltura();
 
 	int getLargura();
+
+	int getPosX();
+
+	int getPosY();
 
 
 	SDL_Rect getCaixaDeColisao();
@@ -361,4 +363,20 @@ private:
 	int vetorNormal02[2];
 	float velocidadeProjetil;
 	SDL_Rect caixaDeColisao[quantCaixasDeColisao];
+};
+
+class AnimExplosao
+{
+	public:
+		bool atingido;
+		bool defPos = false;
+		int* ponteiroPosX = &posX;
+		int* ponteiroPosY = &posY;
+		AnimExplosao();
+		void renderizar();
+		void definirPosicao();
+	private:
+		int posX;
+		int posY;
+		int contador;
 };

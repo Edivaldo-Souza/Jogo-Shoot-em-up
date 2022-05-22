@@ -2,6 +2,7 @@
 #include<iostream>
 #include<SDL.h>
 #include<SDL_image.h>
+#include<SDL_mixer.h>
 #include"constantes.h"
 #include"FuncaoDeclaracao.h"
 #include"Objetos.h"
@@ -10,13 +11,14 @@
 bool init()
 {
 	// Inicialização da biblioteca SDL
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	// Criação da Janela
 	gJanela = SDL_CreateWindow("Jogo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, larJanela, altJanela, SDL_WINDOW_SHOWN);
 	// Criação do renderizador
 	gRenderizador = SDL_CreateRenderer(gJanela, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 	IMG_Init(IMG_INIT_PNG);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	return 0;
 }
 
@@ -39,6 +41,7 @@ bool loadMedia()
 	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
 	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
 	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
+	somDisparoBoss01 = Mix_LoadWAV("efeitos_sonoros/space_laser.wav");
 
 	// Definição dos parâmetros da SDL_Rect que armazenará certa porção da textura com os sprites da nave 
 	naveClipParado[0].x = 256;
@@ -163,6 +166,10 @@ void close()
 	projeteisSpriteSheet.free();
 	inimigo01SpriteSheet.free();
 	bossSpriteSheet.free();
+	Mix_FreeMusic(musicaFase);
+	musicaFase = NULL;
+	Mix_FreeChunk(somDisparoBoss01);
+	somDisparoBoss01 = NULL;
 
 	// Desfaz a Janela
 	SDL_DestroyWindow(gJanela);
@@ -315,13 +322,15 @@ int iniciarMenu()
 	return escolha;
 }
 
+
+
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo)
 {
 	bool sair = true;
 	bool momentoDaFase = true;
 	bool gameover = false;
 	bool receberEventos = true;
-	Uint32 tempoParaOBoss = 5000;
+	Uint32 tempoParaOBoss = 10000;
 	Uint32 tempoParaDisparo = 5000;
 	Uint32 tempoParaEncerramento = 2000;
 	int deslocamentoBackground = 0;
@@ -428,10 +437,12 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 
 			inimigo02[0].move1();
 			inimigo02[1].move2();
-
+ 
+			
 			for (int i = 0; i < quantLaser; i++)
 			{
 				laser[i].move();
+				vetorAnimExplosao[i].definirPosicao();
 				laser[i].avaliaColisao();
 			}
 
@@ -546,6 +557,11 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				laser[i].renderizar();
 			}
 
+			for (int i = 0; i < quantExplosoes; i++)
+			{
+				vetorAnimExplosao[i].renderizar();
+			}
+			
 			for (int i = 0; i < quantInimigos01; i++)
 			{
 				inimigo01[i].renderizar();

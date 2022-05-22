@@ -634,6 +634,16 @@ SDL_Rect objInimigo02::getCaixaDeColisao()
 	return caixaDeColisao;
 }
 
+int objInimigo02::getPosX()
+{
+	return posX;
+}
+
+int objInimigo02::getPosY()
+{
+	return posY;
+}
+
 objBoss::objBoss()
 {
 	posXBoss = larJanela;
@@ -942,6 +952,68 @@ bool cronometro::foiIniciado()
 bool cronometro::foiPausado()
 {
 	return pausado;
+}
+
+AnimExplosao::AnimExplosao()
+{
+	posX = 0;
+	posY = 0;
+	contador = 0;
+}
+
+void AnimExplosao::definirPosicao()
+{
+	for (int i = 0; i < quantLaser; i++)
+	{
+		for (int j = 0; j < quantInimigos01; j++)
+		{
+			if (verificaColisao(laser[i].getCaixaDeColisao(), inimigo01[j].getCaixaDeColisao()) && atingido == false && inimigo01[j].morto == false && laser[i].disparado==true && *inimigo01[j].ponteiroHP == 1)
+			{
+				posX = inimigo01[j].getPosX();
+				posY = inimigo01[j].getPosY();
+				atingido = true;
+				break;
+			}
+		}
+		if (atingido == true)
+		{
+			break;
+		}
+	}
+	if (atingido == false)
+	{
+		for (int i = 0; i < quantLaser; i++)
+		{
+			for (int j = 0; j < quantInimigos02; j++)
+			{
+				if (verificaColisao(laser[i].getCaixaDeColisao(), inimigo02[j].getCaixaDeColisao()) && atingido == false && inimigo02[j].morto == false && laser[i].disparado == true && *inimigo02[j].ponteiroHP == 1)
+				{
+					posX = inimigo02[j].getPosX();
+					posY = inimigo02[j].getPosY();
+					atingido = true;
+					break;
+				}
+			}
+			if (atingido == true)
+			{
+				break;
+			}
+		}
+	}
+}
+
+void AnimExplosao::renderizar()
+{
+	if (atingido == true)
+	{
+		explosaoSpriteSheet.renderizar(posX, posY, &explosaoclip[contador]);
+		contador += 1;
+		if (contador == 8)
+		{
+			atingido = false;
+			contador = 0;
+		}
+	}
 }
 
 

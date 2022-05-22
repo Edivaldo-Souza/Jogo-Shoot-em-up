@@ -45,3 +45,5 @@ objBoss BossInimigo;
 objProjetilBoss BossDisparo;
 
 objProjetilBoss02 BossProjetil02;
+
+AnimExplosao vetorAnimExplosao[quantExplosoes];

@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>;
+#include<SDL_mixer.h>
 // Declaração da largura da janela;
 const int larJanela = 640;
 
@@ -16,6 +17,8 @@ const int quantInimigos01 = 3;
 
 const int quantInimigos02 = 2;
 
+const int quantExplosoes = 15;
+
 // Declaração do inteiro usado para selecionar os indices do vetor de objProjeteis "laser"
 int indiceVetorLaser;
 
@@ -29,6 +32,10 @@ SDL_Window* gJanela = NULL;
 
 // Declaração do Renderizador
 SDL_Renderer* gRenderizador = NULL;
+
+Mix_Music* musicaFase = NULL;
+
+Mix_Chunk* somDisparoBoss01 = NULL;
 
 // Declaração do vetor de SDL_Rect que armazena os sprites da nave do jogador enquanto parada
 SDL_Rect naveClipParado[4];

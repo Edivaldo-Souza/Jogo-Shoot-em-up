@@ -20,8 +20,8 @@ int main(int argc, char* args[])
 	switch (iniciarMenu())
 	{
 			case 1:
-				
 				fase01 = true;
+				Mix_PlayMusic(musicaFase, 0);
 				fase02 = iniciarFase(fase01,1,1,20,0.0005);
 				fase03 = iniciarFase(fase02,3,1,40,0.0008);
 
