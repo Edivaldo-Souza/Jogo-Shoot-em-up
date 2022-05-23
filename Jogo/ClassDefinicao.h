@@ -55,6 +55,24 @@ bool LTextura::loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b)
 	return mTextura != NULL;
 }
 
+bool LTextura::carregarTexto(std::string textoTextura, SDL_Color corDoTexto)
+{
+	free();
+	SDL_Surface* superficie_Texto = TTF_RenderText_Solid(gFonte, textoTextura.c_str(), corDoTexto);
+	if (superficie_Texto == NULL)
+	{
+		std::cout << TTF_GetError();
+	}
+	else
+	{
+		mTextura = SDL_CreateTextureFromSurface(gRenderizador, superficie_Texto);
+		mLargura = superficie_Texto->w;
+		mAltura = superficie_Texto->h;
+		SDL_FreeSurface(superficie_Texto);
+	}
+	return mTextura != NULL;
+}
+
 // função que apaga a textura mas recente carregada, e redifine suas dimensões para o valor de 0
 void LTextura::free()
 {
@@ -382,6 +400,7 @@ void objProjetilLaser::avaliaColisao()
 			if (*inimigo01[i].ponteiroHP <= 0)
 			{
 				inimigo01[i].definePosicao();
+				pontuacaoAtual += PONT_INIMIGO01;
 			}
 			disparado = false;
 		}
@@ -394,6 +413,7 @@ void objProjetilLaser::avaliaColisao()
 			if (*inimigo02[i].ponteiroHP <= 0)
 			{
 				inimigo02[i].definePosicao();
+				pontuacaoAtual += PONT_INIMIGO02;
 			}
 			disparado = false;
 		}
@@ -969,6 +989,7 @@ void AnimExplosao::definirPosicao()
 		{
 			if (verificaColisao(laser[i].getCaixaDeColisao(), inimigo01[j].getCaixaDeColisao()) && atingido == false && inimigo01[j].morto == false && laser[i].disparado==true && *inimigo01[j].ponteiroHP == 1)
 			{
+				Mix_PlayChannel(-1, somExplosao, 0);
 				posX = inimigo01[j].getPosX();
 				posY = inimigo01[j].getPosY();
 				atingido = true;
@@ -988,6 +1009,7 @@ void AnimExplosao::definirPosicao()
 			{
 				if (verificaColisao(laser[i].getCaixaDeColisao(), inimigo02[j].getCaixaDeColisao()) && atingido == false && inimigo02[j].morto == false && laser[i].disparado == true && *inimigo02[j].ponteiroHP == 1)
 				{
+					Mix_PlayChannel(-1,somExplosao,0);
 					posX = inimigo02[j].getPosX();
 					posY = inimigo02[j].getPosY();
 					atingido = true;

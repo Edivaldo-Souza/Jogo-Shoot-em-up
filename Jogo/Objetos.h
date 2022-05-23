@@ -28,9 +28,12 @@ LTextura menuInicial;
 
 LTextura menuSelecao;
 
+LTextura InserirNome;
+
+LTextura EntradaNome;
+
 // Declaração do objJogador que corresponde ao objeto manipulável pelo jogador
 objJogador nave;
-
 
 // Declaração do vetor objProjetilLaser que armazena todos os projéteis  
 objProjetilLaser laser[quantLaser];
@@ -47,3 +50,4 @@ objProjetilBoss BossDisparo;
 objProjetilBoss02 BossProjetil02;
 
 AnimExplosao vetorAnimExplosao[quantExplosoes];
+

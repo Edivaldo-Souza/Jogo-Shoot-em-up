@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<cstdio>
 #include<SDL.h>
 #include<SDL_image.h>
 #include<SDL_mixer.h>
@@ -18,6 +19,7 @@ bool init()
 	gRenderizador = SDL_CreateRenderer(gJanela, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 	IMG_Init(IMG_INIT_PNG);
+	TTF_Init();
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	return 0;
 }
@@ -41,7 +43,9 @@ bool loadMedia()
 	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
 	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
 	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
+	gFonte = TTF_OpenFont("fontes/arial_bold.ttf", 40);
 	somDisparoBoss01 = Mix_LoadWAV("efeitos_sonoros/space_laser.wav");
+	somExplosao = Mix_LoadWAV("efeitos_sonoros/synthetic_explosion_1.flac");
 
 	// Definição dos parâmetros da SDL_Rect que armazenará certa porção da textura com os sprites da nave 
 	naveClipParado[0].x = 256;
@@ -275,7 +279,7 @@ int iniciarMenu()
 
 				switch (e.key.keysym.sym)
 				{
-				case SDLK_e:
+				case SDLK_RETURN:
 					menu = true;
 					break;
 
@@ -322,7 +326,83 @@ int iniciarMenu()
 	return escolha;
 }
 
+std::string receberNome()
+{
+	bool sair = true;
+	SDL_Event e;
+	SDL_Color corDoTexto = { 0xFF,0xFF,0xFF,0xFF };
+	std::string nomeJogador = " ";
+	InserirNome.carregarTexto("Insira seu nome: ", corDoTexto);
+	EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto);
+	
+	SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 0xFF);
+	SDL_RenderClear(gRenderizador);
+	
+	SDL_StartTextInput();
+	while (sair == true)
+	{
+		bool atualizarTexto = false;
 
+		while (SDL_PollEvent(&e) != 0)
+		{
+			
+			if (e.type == SDL_KEYUP)
+			{
+				if (e.key.keysym.sym == SDLK_RETURN)
+				{
+					sair = false;
+				}
+				else if (e.key.keysym.sym == SDL_QUIT)
+				{
+					throw sair;
+				}
+			}
+			
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_BACKSPACE && nomeJogador.length() > 0)
+				{
+					nomeJogador.pop_back();
+					atualizarTexto = true;
+				}
+			}
+			else if (e.type == SDL_TEXTINPUT)
+			{
+				nomeJogador += e.text.text;
+				atualizarTexto = true;
+			}
+		}
+		if (atualizarTexto == true)
+		{
+			if (nomeJogador != "")
+			{
+				EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto);
+			}
+			else
+			{
+				EntradaNome.carregarTexto(" ", corDoTexto);
+			}
+		}
+		SDL_SetRenderDrawColor(gRenderizador,0, 0, 0, 0xFF);
+		SDL_RenderClear(gRenderizador);
+
+		InserirNome.renderizar(larJanela / 2 - InserirNome.getLargura() / 2, altJanela / 2 - InserirNome.getAltura() / 2);
+		EntradaNome.renderizar((larJanela - EntradaNome.getLargura())/2, (altJanela - EntradaNome.getAltura())/2 + InserirNome.getAltura());
+		SDL_RenderPresent(gRenderizador);
+	}
+	SDL_StopTextInput();
+	return nomeJogador;
+}
+
+void escreveNoRanking(std::string nomeJogador, int pontuacao)
+{
+	FILE* ranking = NULL;
+	int colocacao = 1;
+	
+	ranking = fopen("planilha/ranking.tsv", "w");
+	fprintf(ranking, "%i\t%s\t%i", colocacao, nomeJogador, pontuacao);
+	fclose(ranking);
+}
 
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo)
 {
@@ -374,7 +454,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			if (e.type == SDL_QUIT)
 			{
 				sair = true;
-				return false;
+				throw sair;
 			}
 			nave.avaliarEventos(e);
 			nave.avaliarEventosLaser(e);
@@ -589,6 +669,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 		{
 			receberEventos = false;
 			sair = true;
+			pontuacaoAtual += PONT_BOSS;
 			reiniciarFase();
 			std::cout << "true";
 			return true;

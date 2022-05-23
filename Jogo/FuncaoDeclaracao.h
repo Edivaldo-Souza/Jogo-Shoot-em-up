@@ -1,6 +1,7 @@
 #pragma once
 #include<SDL.h>
 
+
 // Função responsável pela inicialização da biblioteca SDL
 bool init();
 
@@ -16,3 +17,7 @@ bool verificaColisao(SDL_Rect a, SDL_Rect b);
 int iniciarMenu();
 
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo);
+
+std::string receberNome();
+
+void escreveNoRanking(std::string nomeJogador, int pontuacao);

@@ -1,11 +1,20 @@
 #pragma once
 #include <SDL.h>;
 #include<SDL_mixer.h>
+#include<SDL_ttf.h>
+
 // Declaração da largura da janela;
 const int larJanela = 640;
 
 // Declaração da altura da janela;
 const int altJanela = 480;
+
+enum PontosPorInimigo
+{
+	PONT_INIMIGO01 = 10,
+	PONT_INIMIGO02 = 10,
+	PONT_BOSS = 100,
+};
 
 // Define a quantidade de projéteis a serem criados
 const int quantLaser = 15;
@@ -26,6 +35,8 @@ int Div = larJanela / 4;
 
 int frame = 0;
 
+int pontuacaoAtual = 0;
+
 
 // Declaração da Janela
 SDL_Window* gJanela = NULL;
@@ -36,6 +47,10 @@ SDL_Renderer* gRenderizador = NULL;
 Mix_Music* musicaFase = NULL;
 
 Mix_Chunk* somDisparoBoss01 = NULL;
+
+Mix_Chunk* somExplosao = NULL;
+
+TTF_Font* gFonte = NULL;
 
 // Declaração do vetor de SDL_Rect que armazena os sprites da nave do jogador enquanto parada
 SDL_Rect naveClipParado[4];
