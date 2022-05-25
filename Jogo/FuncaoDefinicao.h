@@ -27,6 +27,7 @@ bool init()
 bool loadMedia()
 {
 	naveSpriteSheet.loadFromFile("spritesheets/spaceships.png", 0xFF, 0xFF, 0xFF);
+	naveSpriteSheet.setBlendMode(SDL_BLENDMODE_BLEND);
 	propulsorSpriteSheet.loadFromFile("spritesheets_2/Thruster_04.png", 0xFF, 0xFF, 0xFF);
 	projeteisSpriteSheet.loadFromFile("spritesheets_2/Fx_012.png", 0xFF, 0, 0xFF);
 	inimigo01SpriteSheet.loadFromFile("spritesheets/Spaceships.png", 0xFF, 0, 0xFF);
@@ -345,16 +346,16 @@ std::string receberNome()
 
 		while (SDL_PollEvent(&e) != 0)
 		{
+			if (e.type == SDL_QUIT)
+			{
+				throw sair;
+			}
 			
 			if (e.type == SDL_KEYUP)
 			{
 				if (e.key.keysym.sym == SDLK_RETURN)
 				{
 					sair = false;
-				}
-				else if (e.key.keysym.sym == SDL_QUIT)
-				{
-					throw sair;
 				}
 			}
 			
@@ -364,12 +365,14 @@ std::string receberNome()
 				{
 					nomeJogador.pop_back();
 					atualizarTexto = true;
+					std::cout << nomeJogador << std::endl;
 				}
 			}
 			else if (e.type == SDL_TEXTINPUT)
 			{
 				nomeJogador += e.text.text;
 				atualizarTexto = true;
+				std::cout << nomeJogador << std::endl;
 			}
 		}
 		if (atualizarTexto == true)
@@ -400,7 +403,7 @@ void escreveNoRanking(std::string nomeJogador, int pontuacao)
 	int colocacao = 1;
 	
 	ranking = fopen("planilha/ranking.tsv", "w");
-	fprintf(ranking, "%i\t%s\t%i", colocacao, nomeJogador, pontuacao);
+	//fprintf(ranking, "%i\t%s\t%i", colocacao,nomeJogador, pontuacao);
 	fclose(ranking);
 }
 
@@ -435,7 +438,8 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 	{
 		inimigo02[i].HPdefinido = HPinimigo02;
 	}
-	*BossInimigo.ponteiroHP = HPBoss;
+	*BossInimigo.ponteiroHP1 = HPBoss;
+	*BossInimigo.ponteiroHP2 = HPBoss;
 
 	BossProjetil02.velocidade = tempoDisparo;
 
@@ -524,6 +528,21 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				laser[i].move();
 				vetorAnimExplosao[i].definirPosicao();
 				laser[i].avaliaColisao();
+			}
+
+			if (BossInimigo.getHP1() <= 0)
+			{
+				for (int i = 0; i < quantExplosoesBoss/2; i++)
+				{
+					vetorExplosoesBoss[i].atingido = true;
+				}
+			}
+			if (BossInimigo.getHP2() <= 0)
+			{
+				for (int i = 4; i < quantExplosoesBoss; i++)
+				{
+					vetorExplosoesBoss[i].atingido = true;
+				}
 			}
 
 			BossDisparo.move();
@@ -656,6 +675,15 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 
 			BossProjetil02.renderizar();
 
+			vetorExplosoesBoss[0].renderizar02(500, 120);
+			vetorExplosoesBoss[1].renderizar02(590, 130);
+			vetorExplosoesBoss[2].renderizar02(530, 140);
+			vetorExplosoesBoss[3].renderizar02(550, 110);
+
+			vetorExplosoesBoss[4].renderizar02(500, 320);
+			vetorExplosoesBoss[5].renderizar02(590, 330);
+			vetorExplosoesBoss[6].renderizar02(530, 340);
+			vetorExplosoesBoss[7].renderizar02(550, 310);
 		}
 
 		SDL_RenderPresent(gRenderizador);
@@ -665,7 +693,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			std::cout << "false";
 			return false;
 		}
-		else if (BossInimigo.getHP() <= 0)
+		else if (BossInimigo.getHP1() <= 0 && BossInimigo.getHP2() <= 0)
 		{
 			receberEventos = false;
 			sair = true;

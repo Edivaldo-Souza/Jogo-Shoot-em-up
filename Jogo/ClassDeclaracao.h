@@ -24,6 +24,10 @@ public:
 	// funçao para realizar a modulação das cores de uma textura 
 	void setColor(Uint8 r, Uint8 g, Uint8 b);
 
+	void setBlendMode(SDL_BlendMode blending);
+
+	void setAlpha(Uint8 alpha);
+
 	// função que renderiza uma textura na janela recebendo sua posição(x,y), um SDL_Rect para o caso
 	// de ser necessário renderizar apenas uma parcela da imagem carregada, um ângulo de rotação,
 	// um SDL_Point para definir um ponto de referência para a rotação, e um SDL_RendererFlip para
@@ -296,18 +300,21 @@ public:
 		altCanhao = 40,
 	};
 	SDL_Rect* ponteiroCaixaDeColisao = caixasDeColisao;
-	int* ponteiroHP = &HP;
+	int* ponteiroHP1 = &HP1;
+	int* ponteiroHP2 = &HP2;
 	bool aparecer = false;
 	bool morto = true;
 	objBoss();
 	void redefinir();
 	void definirCaixasDeColisao();
 	void renderizar();
-	int getHP();
+	int getHP1();
+	int getHP2();
 private:
 	int posXBoss;
 	int posYBoss;
-	int HP;
+	int HP1;
+	int HP2;
 	SDL_Rect caixasDeColisao[totalDeCaixas];
 };
 
@@ -376,6 +383,7 @@ class AnimExplosao
 		int* ponteiroPosY = &posY;
 		AnimExplosao();
 		void renderizar();
+		void renderizar02(int x, int y);
 		void definirPosicao();
 	private:
 		int posX;

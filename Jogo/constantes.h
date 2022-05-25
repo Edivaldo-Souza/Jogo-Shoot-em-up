@@ -28,6 +28,8 @@ const int quantInimigos02 = 2;
 
 const int quantExplosoes = 15;
 
+const int quantExplosoesBoss = 8;
+
 // Declaração do inteiro usado para selecionar os indices do vetor de objProjeteis "laser"
 int indiceVetorLaser;
 

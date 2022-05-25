@@ -92,6 +92,16 @@ void LTextura::setColor(Uint8 r, Uint8 g, Uint8 b)
 	SDL_SetTextureColorMod(mTextura, r, g, b);
 }
 
+void LTextura::setBlendMode(SDL_BlendMode blending)
+{
+	SDL_SetTextureBlendMode(mTextura, blending);
+}
+
+void LTextura::setAlpha(Uint8 alpha)
+{
+	SDL_SetTextureAlphaMod(mTextura, alpha);
+}
+
 
 // função que renderiza uma textura na janela recebendo sua posição(x,y), um SDL_Rect para o caso
 // de ser necessário renderizar apenas uma parcela da imagem carregada, um ângulo de rotação,
@@ -236,6 +246,7 @@ void objJogador::avaliarColisao()
 {
 	if (tempoInvencibilidade.foiIniciado() == false)
 	{
+		naveSpriteSheet.setAlpha(255);
 		for (int i = 0; i < quantInimigos01; i++)
 		{
 			if (verificaColisao(caixaDeColisao, inimigo01[i].getCaixaDeColisao()) == true)
@@ -292,6 +303,10 @@ void objJogador::avaliarColisao()
 	else if (tempoInvencibilidade.getTempo() > tempoImortal)
 	{
 		tempoInvencibilidade.parar();
+	}
+	else
+	{
+		naveSpriteSheet.setAlpha(127);
 	}
 }
 
@@ -422,9 +437,24 @@ void objProjetilLaser::avaliaColisao()
 	{
 		if (verificaColisao(caixaDeColisao, BossInimigo.ponteiroCaixaDeColisao[i]) == true && disparado == true && BossInimigo.morto == false)
 		{
-			if (i == 0 || i == 1)
+			if (i == 0)
 			{
-				*BossInimigo.ponteiroHP = *BossInimigo.ponteiroHP - DANO;
+				if (BossInimigo.getHP1() > 0)
+				{
+					Mix_PlayChannel(-1, somExplosao, 0);
+				}
+				*BossInimigo.ponteiroHP1 = *BossInimigo.ponteiroHP1 - DANO;
+				std::cout << *BossInimigo.ponteiroHP1 << std::endl;
+				disparado = false;
+			}
+			else if (i == 1)
+			{
+				if (BossInimigo.getHP2() > 0)
+				{
+					Mix_PlayChannel(-1, somExplosao, 0);
+				}
+				*BossInimigo.ponteiroHP2 = *BossInimigo.ponteiroHP2 - DANO;
+				std::cout << *BossInimigo.ponteiroHP2 << std::endl;
 				disparado = false;
 			}
 			else
@@ -668,7 +698,8 @@ objBoss::objBoss()
 {
 	posXBoss = larJanela;
 	posYBoss = altJanela / 2 - altTotal / 2;
-	HP = 100;
+	HP1 = 100;
+	HP2 = 100;
 	for (int i = 0; i < totalDeCaixas - 1; i++)
 	{
 		caixasDeColisao[i].x = NULL;
@@ -698,7 +729,8 @@ void objBoss::redefinir()
 {
 	posXBoss = larJanela;
 	posYBoss = altJanela / 2 - altTotal / 2;
-	HP = 100;
+	HP1 = 100;
+	HP2 = 100;
 	for (int i = 0; i < totalDeCaixas - 1; i++)
 	{
 		caixasDeColisao[i].x = NULL;
@@ -737,9 +769,14 @@ void objBoss::renderizar()
 	}
 }
 
-int objBoss::getHP()
+int objBoss::getHP1()
 {
-	return HP;
+	return HP1;
+}
+
+int objBoss::getHP2()
+{
+	return HP2;
 }
 
 objProjetilBoss::objProjetilBoss()
@@ -1029,6 +1066,20 @@ void AnimExplosao::renderizar()
 	if (atingido == true)
 	{
 		explosaoSpriteSheet.renderizar(posX, posY, &explosaoclip[contador]);
+		contador += 1;
+		if (contador == 8)
+		{
+			atingido = false;
+			contador = 0;
+		}
+	}
+}
+
+void AnimExplosao::renderizar02(int x, int y)
+{
+	if (atingido == true)
+	{
+		explosaoSpriteSheet.renderizar(x, y, &explosaoclip[contador]);
 		contador += 1;
 		if (contador == 8)
 		{
