@@ -267,9 +267,6 @@ int iniciarMenu()
 		menuSelecao.setColor(0, 0, 255);
 		while (SDL_PollEvent(&e) != 0)
 		{
-			menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
-			menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
-			menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
 			if (e.type == SDL_QUIT)
 			{
 				menu = true;
@@ -301,26 +298,32 @@ int iniciarMenu()
 					break;
 				}
 			}
-			switch (escolha)
-			{
-			case 0:
-				menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
-				escolha = 3;
-				break;
-			case 1:
-				menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
-				break;
-			case 2:
-				menuSelecao.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
-				break;
-			case 3:
-				menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
-				break;
-			case 4:
-				menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
-				escolha = 1;
-				break;
-			}
+		}
+		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
+		SDL_RenderClear(gRenderizador);
+		menuInicial.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+		menuInicial.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+		menuInicial.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+
+		switch (escolha)
+		{
+		case 0:
+			menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+			escolha = 3;
+			break;
+		case 1:
+			menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+			break;
+		case 2:
+			menuSelecao.renderizar(larJanela / 2 - 159 / 2, 240, &menuInicialClip[1]);
+			break;
+		case 3:
+			menuSelecao.renderizar(larJanela / 2 - 93 / 2, 360, &menuInicialClip[2]);
+			break;
+		case 4:
+			menuSelecao.renderizar(larJanela / 2 - 156 / 2, 120, &menuInicialClip[0]);
+			escolha = 1;
+			break;
 		}
 		SDL_RenderPresent(gRenderizador);
 	}
@@ -689,6 +692,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 		SDL_RenderPresent(gRenderizador);
 		if (nave.getHP() <= 0)
 		{
+			receberEventos = false;
 			sair = true;
 			std::cout << "false";
 			return false;
