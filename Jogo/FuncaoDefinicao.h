@@ -42,9 +42,9 @@ bool loadMedia()
 	background[7].loadFromFile("background/asteroide4.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
 	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
-	menuInicial.loadFromFile("menu_sprite_sheet/menu_botoes.png", 0, 0xFF, 0);
-	menuSelecao.loadFromFile("menu_sprite_sheet/menu_botoes.png", 0, 0xFF, 0);
-	telaGameOver.loadFromFile("menu_sprite_sheet/gameover.png", 0, 0xFF, 0);
+	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
+	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
+	telaGameOver.loadFromFile("menu_inicial_spritesheet/gameover.png", 0, 0xFF, 0);
 	gFonte = TTF_OpenFont("fontes/arial_bold.TTF", 40);
 	gFonte2 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 20);
 	gFonte3 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 36);
