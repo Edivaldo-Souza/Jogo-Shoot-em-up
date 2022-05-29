@@ -42,9 +42,12 @@ bool loadMedia()
 	background[7].loadFromFile("background/asteroide4.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
 	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
-	menuInicial.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
-	menuSelecao.loadFromFile("menu_inicial_spritesheet/menu_botoes.png", 0, 0xFF, 0);
-	gFonte = TTF_OpenFont("fontes/arial_bold.ttf", 40);
+	menuInicial.loadFromFile("telas/menu_botoes.png", 0, 0xFF, 0);
+	menuSelecao.loadFromFile("telas/menu_botoes.png", 0, 0xFF, 0);
+	telaGameOver.loadFromFile("telas/gameover1.png", 0, 0xFF, 0);
+	gFonte = TTF_OpenFont("fontes/arial_bold.TTF", 40);
+	gFonte2 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 20);
+	gFonte3 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 36);
 	somDisparoBoss01 = Mix_LoadWAV("efeitos_sonoros/space_laser.wav");
 	somExplosao = Mix_LoadWAV("efeitos_sonoros/synthetic_explosion_1.flac");
 
@@ -159,6 +162,17 @@ bool loadMedia()
 	menuInicialClip[2].y = 110;
 	menuInicialClip[2].w = 93;
 	menuInicialClip[2].h = 43;
+
+	TextoGameOverClip[0].x = 0;
+	TextoGameOverClip[0].y = 0;
+	TextoGameOverClip[0].w = 415;
+	TextoGameOverClip[0].h = 55;
+
+	TextoGameOverClip[1].x = 0;
+	TextoGameOverClip[1].y = 55;
+	TextoGameOverClip[1].w = 220;
+	TextoGameOverClip[1].h = 55;
+
 
 
 	return 0;
@@ -329,6 +343,122 @@ int iniciarMenu()
 	}
 	return escolha;
 }
+void Gameover()
+{
+	int deslocamentoTela = 0;
+	SDL_Event e;
+	SDL_Color c1 = { 0xFF,0xFF,0xFF};
+	SDL_Color c2 = { 255,0,0 };
+	bool sair = false;
+	int escolha=1;
+
+	while (!sair)
+	{
+		deslocamentoTela -= 1;
+		if (deslocamentoTela < telaGameOver.getLargura() * -1)
+		{
+			deslocamentoTela = 0;
+		}
+		while (SDL_PollEvent(&e) != 0)
+		{
+			if (e.type == SDL_QUIT)
+			{
+				sair = true;
+				throw sair;
+			}
+			if (e.type == SDL_KEYDOWN)
+			{
+
+				switch (e.key.keysym.sym)
+				{
+				case SDLK_RETURN:
+					sair = true;
+					break;
+
+				case SDLK_DOWN:
+					escolha = escolha + 2;
+					break;
+
+				case SDLK_UP:
+					escolha = escolha - 2;
+					break;
+				}
+			}
+
+		}
+		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
+		SDL_RenderClear(gRenderizador);
+		TextoGameOver[0].carregarTexto("TENTAR NOVAMENTE", c1,gFonte2);
+		TextoGameOver[1].carregarTexto("DESISTIR", c1,gFonte2);
+		TextoGameOver[2].carregarTexto("TENTAR NOVAMENTE", c2,gFonte2);
+		TextoGameOver[3].carregarTexto("DESISTIR", c2,gFonte2);
+		TextoGameOver[5].carregarTexto("GAME OVER !", c1,gFonte3);
+		telaGameOver.renderizar(deslocamentoTela, 0);
+		telaGameOver.renderizar(deslocamentoTela + telaGameOver.getLargura(), 0);
+		TextoGameOver[5].renderizar(160, 50);
+		TextoGameOver[0].renderizar(110, 180);
+		TextoGameOver[1].renderizar(110, 240);
+
+		switch (escolha)
+		{
+		case -1:
+			TextoGameOver[3].renderizar(110, 240);
+			escolha = 3;
+			break;
+		case 1:
+			TextoGameOver[2].renderizar(110, 180);
+			break;
+		case 3:
+			TextoGameOver[3].renderizar(110, 240);
+			break;
+		case 5:
+			TextoGameOver[2].renderizar(110, 180);
+			escolha = 1;
+			break;
+		}
+		SDL_RenderPresent(gRenderizador);
+	}
+	if (escolha == 3)
+	{
+		throw sair;
+	}
+}
+
+void vitoria()
+{
+	SDL_Event e;
+	SDL_Color c = { 255,255,255 };
+	bool sair = false;
+
+	while (!sair)
+	{
+		while (SDL_PollEvent(&e) != 0)
+		{
+			if (e.type == SDL_QUIT)
+			{
+				sair = true;
+				throw sair;
+			}
+			if (e.type == SDL_KEYDOWN)
+			{
+
+				switch (e.key.keysym.sym)
+				{
+				case SDLK_RETURN:
+					sair = true;
+					break;
+				}
+			}
+		}
+		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
+		SDL_RenderClear(gRenderizador);
+		TextoVitoria[0].carregarTexto("FASE CONCLUIDA !", c, gFonte3);
+		TextoVitoria[1].carregarTexto("Aperte ENTER para continuar", c, gFonte2);
+		TextoVitoria[0].renderizar(80, 50);
+		TextoVitoria[1].renderizar(80, 120);
+		SDL_RenderPresent(gRenderizador);
+	}
+}
 
 std::string receberNome()
 {
@@ -336,8 +466,8 @@ std::string receberNome()
 	SDL_Event e;
 	SDL_Color corDoTexto = { 0xFF,0xFF,0xFF,0xFF };
 	std::string nomeJogador = " ";
-	InserirNome.carregarTexto("Insira seu nome: ", corDoTexto);
-	EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto);
+	InserirNome.carregarTexto("Insira seu nome: ", corDoTexto,gFonte);
+	EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto,gFonte);
 	
 	SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 0xFF);
 	SDL_RenderClear(gRenderizador);
@@ -382,11 +512,11 @@ std::string receberNome()
 		{
 			if (nomeJogador != "")
 			{
-				EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto);
+				EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto,gFonte);
 			}
 			else
 			{
-				EntradaNome.carregarTexto(" ", corDoTexto);
+				EntradaNome.carregarTexto(" ", corDoTexto,gFonte);
 			}
 		}
 		SDL_SetRenderDrawColor(gRenderizador,0, 0, 0, 0xFF);
@@ -555,7 +685,6 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 
 			SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(gRenderizador);
-
 			background[0].renderizar(deslocamentoBackground, 0);
 			background[0].renderizar(deslocamentoBackground + background[0].getLargura(), 0);
 
@@ -688,6 +817,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			vetorExplosoesBoss[6].renderizar02(530, 340);
 			vetorExplosoesBoss[7].renderizar02(550, 310);
 		}
+		
 
 		SDL_RenderPresent(gRenderizador);
 		if (nave.getHP() <= 0)
@@ -695,6 +825,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			receberEventos = false;
 			sair = true;
 			std::cout << "false";
+			Gameover();
 			return false;
 		}
 		else if (BossInimigo.getHP1() <= 0 && BossInimigo.getHP2() <= 0)
@@ -704,6 +835,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 			pontuacaoAtual += PONT_BOSS;
 			reiniciarFase();
 			std::cout << "true";
+			vitoria();
 			return true;
 		}
 	}

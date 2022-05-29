@@ -29,9 +29,10 @@ int main(int argc, char* args[])
 			reiniciarFase();
 			try
 			{
-				fase02 = iniciarFase(fase01, 1, 1, 20, 0.0005);
+				fase02 = iniciarFase(fase01, 1, 1, 5, 0.0005);
 				fase03 = iniciarFase(fase02, 3, 1, 40, 0.0008);
 				escreveNoRanking(receberNome(), pontuacaoAtual);
+				
 			}
 			catch (bool sair)
 			{
@@ -39,6 +40,7 @@ int main(int argc, char* args[])
 				break;
 			}
 			break;
+
 		case 2:
 			//ranking
 			break;

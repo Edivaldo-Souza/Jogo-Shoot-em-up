@@ -55,10 +55,10 @@ bool LTextura::loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b)
 	return mTextura != NULL;
 }
 
-bool LTextura::carregarTexto(std::string textoTextura, SDL_Color corDoTexto)
+bool LTextura::carregarTexto(std::string textoTextura, SDL_Color corDoTexto,TTF_Font* font)
 {
 	free();
-	SDL_Surface* superficie_Texto = TTF_RenderText_Solid(gFonte, textoTextura.c_str(), corDoTexto);
+	SDL_Surface* superficie_Texto = TTF_RenderText_Solid(font, textoTextura.c_str(), corDoTexto);
 	if (superficie_Texto == NULL)
 	{
 		std::cout << TTF_GetError();

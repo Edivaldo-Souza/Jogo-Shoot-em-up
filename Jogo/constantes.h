@@ -54,6 +54,10 @@ Mix_Chunk* somExplosao = NULL;
 
 TTF_Font* gFonte = NULL;
 
+TTF_Font* gFonte2 = NULL;
+
+TTF_Font* gFonte3 = NULL;
+
 // Declaração do vetor de SDL_Rect que armazena os sprites da nave do jogador enquanto parada
 SDL_Rect naveClipParado[4];
 
@@ -76,3 +80,5 @@ SDL_Rect BossClip;
 SDL_Rect BossProjetilClip[2];
 
 SDL_Rect menuInicialClip[3];
+
+SDL_Rect TextoGameOverClip[2];

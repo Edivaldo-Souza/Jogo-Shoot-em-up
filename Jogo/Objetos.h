@@ -28,6 +28,14 @@ LTextura menuInicial;
 
 LTextura menuSelecao;
 
+LTextura telaGameOver;
+
+LTextura TextoGameOver[5];
+
+LTextura telaVitoria;
+
+LTextura TextoVitoria[3];
+
 LTextura InserirNome;
 
 LTextura EntradaNome;

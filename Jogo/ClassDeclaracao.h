@@ -16,7 +16,7 @@ public:
 	// função que recebe uma string correspondente ao caminho(nome_da_pasta/imagem.png) da imagem a ser definida como textura 
 	bool loadFromFile(std::string path, Uint32 r, Uint32 g, Uint32 b);
 
-	bool carregarTexto(std::string textoTextura, SDL_Color corDoTexto);
+	bool carregarTexto(std::string textoTextura, SDL_Color corDoTexto,TTF_Font* font);
 
 	// função que apaga a textura mas recente carregada, e redifine suas dimensões para o valor de 0 
 	void free();
