@@ -2,21 +2,25 @@
 #include<SDL.h>
 
 
-// Função responsável pela inicialização da biblioteca SDL
+// FunÃ§Ã£o responsÃ¡vel pela inicializaÃ§Ã£o da biblioteca SDL
 bool init();
 
-// Função responsável por carregar mídias(imagens,áudios,fonts)
+// FunÃ§Ã£o responsÃ¡vel por carregar mÃ­dias(imagens,Ã¡udios,fonts)
 bool loadMedia();
 
-// Função responsável por "desligar" a biblioteca SDL e apagar os valores de estruturas globais(SDL_Window,SDL_Renderer,SDL_Textue)
+// FunÃ§Ã£o responsÃ¡vel por "desligar" a biblioteca SDL e apagar os valores de estruturas globais(SDL_Window,SDL_Renderer,SDL_Textue)
 void close();
 
-// Função que verifica se duas caixas de colisão se cruzaram
+// FunÃ§Ã£o que verifica se duas caixas de colisÃ£o se cruzaram
 bool verificaColisao(SDL_Rect a, SDL_Rect b);
 
 int iniciarMenu();
 
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo);
+
+void Gameover();
+
+void vitoria();
 
 std::string receberNome();
 
