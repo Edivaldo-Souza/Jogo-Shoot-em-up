@@ -42,9 +42,9 @@ bool loadMedia()
 	background[7].loadFromFile("background/asteroide4.png", 0xFF, 0, 0);
 	bossSpriteSheet.loadFromFile("boss_spritesheet/boss_sprites.png", 0, 0xFF, 0);
 	DisparosSpriteSheet.loadFromFile("spritesheets_2/beams.png", 0, 0xFF, 0);
-	menuInicial.loadFromFile("telas/menu_botoes.png", 0, 0xFF, 0);
-	menuSelecao.loadFromFile("telas/menu_botoes.png", 0, 0xFF, 0);
-	telaGameOver.loadFromFile("telas/gameover1.png", 0, 0xFF, 0);
+	menuInicial.loadFromFile("menu_sprite_sheet/menu_botoes.png", 0, 0xFF, 0);
+	menuSelecao.loadFromFile("menu_sprite_sheet/menu_botoes.png", 0, 0xFF, 0);
+	telaGameOver.loadFromFile("menu_sprite_sheet/gameover.png", 0, 0xFF, 0);
 	gFonte = TTF_OpenFont("fontes/arial_bold.TTF", 40);
 	gFonte2 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 20);
 	gFonte3 = TTF_OpenFont("fontes/Pixel_Sans_Serif.ttf", 36);
@@ -162,18 +162,6 @@ bool loadMedia()
 	menuInicialClip[2].y = 110;
 	menuInicialClip[2].w = 93;
 	menuInicialClip[2].h = 43;
-
-	TextoGameOverClip[0].x = 0;
-	TextoGameOverClip[0].y = 0;
-	TextoGameOverClip[0].w = 415;
-	TextoGameOverClip[0].h = 55;
-
-	TextoGameOverClip[1].x = 0;
-	TextoGameOverClip[1].y = 55;
-	TextoGameOverClip[1].w = 220;
-	TextoGameOverClip[1].h = 55;
-
-
 
 	return 0;
 }
