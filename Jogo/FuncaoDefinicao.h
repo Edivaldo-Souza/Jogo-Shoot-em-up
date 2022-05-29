@@ -300,6 +300,7 @@ int iniciarMenu()
 					break;
 				}
 			}
+			nave.avaliarEventos(e);
 		}
 		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
 		SDL_RenderClear(gRenderizador);
@@ -336,9 +337,13 @@ void Gameover()
 	int deslocamentoTela = 0;
 	SDL_Event e;
 	SDL_Color c1 = { 0xFF,0xFF,0xFF};
-	SDL_Color c2 = { 255,0,0 };
 	bool sair = false;
-	int escolha=1;
+	int escolha = 1; 
+	cronometro tempoDeExibicao;
+	tempoDeExibicao.comecar();
+	TextoGameOver[0].carregarTexto("CONTINUAR", c1, gFonte2);
+	TextoGameOver[1].carregarTexto("SAIR", c1, gFonte2);
+	TextoGameOver[2].carregarTexto("GAME OVER !", c1, gFonte3);
 
 	while (!sair)
 	{
@@ -354,7 +359,7 @@ void Gameover()
 				sair = true;
 				throw sair;
 			}
-			if (e.type == SDL_KEYDOWN)
+			else if (e.type == SDL_KEYDOWN)
 			{
 
 				switch (e.key.keysym.sym)
@@ -372,41 +377,37 @@ void Gameover()
 					break;
 				}
 			}
-
+			nave.avaliarEventos(e);
 		}
-		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
-		SDL_RenderClear(gRenderizador);
-		TextoGameOver[0].carregarTexto("TENTAR NOVAMENTE", c1,gFonte2);
-		TextoGameOver[1].carregarTexto("DESISTIR", c1,gFonte2);
-		TextoGameOver[2].carregarTexto("TENTAR NOVAMENTE", c2,gFonte2);
-		TextoGameOver[3].carregarTexto("DESISTIR", c2,gFonte2);
-		TextoGameOver[5].carregarTexto("GAME OVER !", c1,gFonte3);
-		telaGameOver.renderizar(deslocamentoTela, 0);
-		telaGameOver.renderizar(deslocamentoTela + telaGameOver.getLargura(), 0);
-		TextoGameOver[5].renderizar(160, 50);
-		TextoGameOver[0].renderizar(110, 180);
-		TextoGameOver[1].renderizar(110, 240);
-
 		switch (escolha)
 		{
 		case -1:
-			TextoGameOver[3].renderizar(110, 240);
+			TextoGameOver[1].setColor(255,0,0);
+			TextoGameOver[0].setColor(255,255, 255);
 			escolha = 3;
 			break;
 		case 1:
-			TextoGameOver[2].renderizar(110, 180);
+			TextoGameOver[0].setColor(255, 0, 0);
+			TextoGameOver[1].setColor(255, 255, 255);
 			break;
 		case 3:
-			TextoGameOver[3].renderizar(110, 240);
+			TextoGameOver[1].setColor(255, 0, 0);
+			TextoGameOver[0].setColor(255, 255, 255);
 			break;
 		case 5:
-			TextoGameOver[2].renderizar(110, 180);
+			TextoGameOver[0].setColor(255, 0, 0);
+			TextoGameOver[1].setColor(255, 255, 255);
 			escolha = 1;
 			break;
 		}
+		telaGameOver.renderizar(deslocamentoTela, 0);
+		telaGameOver.renderizar(deslocamentoTela + telaGameOver.getLargura(), 0);
+		TextoGameOver[2].renderizar(160, 50);
+		TextoGameOver[0].renderizar(110, 180);
+		TextoGameOver[1].renderizar(110, 240);
 		SDL_RenderPresent(gRenderizador);
 	}
-	if (escolha == 3)
+	if (escolha == -1 || escolha == 3)
 	{
 		throw sair;
 	}
@@ -417,8 +418,11 @@ void vitoria()
 	SDL_Event e;
 	SDL_Color c = { 255,255,255 };
 	bool sair = false;
+	TextoVitoria[0].carregarTexto("FASE CONCLUIDA !", c, gFonte3);
+	cronometro tempoDeExibicao;
+	tempoDeExibicao.comecar();
 
-	while (!sair)
+	while (tempoDeExibicao.getTempo()<3000)
 	{
 		while (SDL_PollEvent(&e) != 0)
 		{
@@ -427,23 +431,11 @@ void vitoria()
 				sair = true;
 				throw sair;
 			}
-			if (e.type == SDL_KEYDOWN)
-			{
-
-				switch (e.key.keysym.sym)
-				{
-				case SDLK_RETURN:
-					sair = true;
-					break;
-				}
-			}
+			nave.avaliarEventos(e);
 		}
 		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
 		SDL_RenderClear(gRenderizador);
-		TextoVitoria[0].carregarTexto("FASE CONCLUIDA !", c, gFonte3);
-		TextoVitoria[1].carregarTexto("Aperte ENTER para continuar", c, gFonte2);
 		TextoVitoria[0].renderizar(80, 50);
-		TextoVitoria[1].renderizar(80, 120);
 		SDL_RenderPresent(gRenderizador);
 	}
 }
@@ -451,6 +443,7 @@ void vitoria()
 std::string receberNome()
 {
 	bool sair = true;
+	bool recemIniciado = true;
 	SDL_Event e;
 	SDL_Color corDoTexto = { 0xFF,0xFF,0xFF,0xFF };
 	std::string nomeJogador = " ";
@@ -474,7 +467,7 @@ std::string receberNome()
 			
 			if (e.type == SDL_KEYUP)
 			{
-				if (e.key.keysym.sym == SDLK_RETURN)
+				if (e.key.keysym.sym == SDLK_RETURN && recemIniciado == false)
 				{
 					sair = false;
 				}
@@ -492,9 +485,11 @@ std::string receberNome()
 			else if (e.type == SDL_TEXTINPUT)
 			{
 				nomeJogador += e.text.text;
+				recemIniciado = false;
 				atualizarTexto = true;
 				std::cout << nomeJogador << std::endl;
 			}
+			nave.avaliarEventos(e);
 		}
 		if (atualizarTexto == true)
 		{
@@ -564,157 +559,154 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 
 	BossProjetil02.velocidade = tempoDisparo;
 
-	if (iniciar == true)
-	{
+	if (iniciar == true) {
 		sair = false;
 		timerBoss.comecar();
-	}
-
-	while (sair==false)
-	{
-		while (SDL_PollEvent(&e) != 0 && receberEventos==true)
+		while (sair == false)
 		{
-			// Caso o evento lido seja o apertar do botão Fechar, a variável sair recebe true
-			// e o looping principal é finalizado
-			if (e.type == SDL_QUIT)
+			while (SDL_PollEvent(&e) != 0 && receberEventos == true)
 			{
-				sair = true;
-				throw sair;
-			}
-			nave.avaliarEventos(e);
-			nave.avaliarEventosLaser(e);
-		}
-		if (gameover == false)
-		{
-			if (timerBoss.getTempo() > tempoParaOBoss)
-			{
-				momentoDaFase = false;
-				BossInimigo.aparecer = true;
-				timerBoss.parar();
-				timerDisparo.comecar();
-			}
-
-			if (timerDisparo.getTempo() > tempoParaDisparo && BossInimigo.morto == false)
-			{
-				BossDisparo.disparado = true;
-				timerDisparo.parar();
-				timerDisparo.comecar();
-			}
-
-			nave.move();
-			nave.avaliarColisao();
-
-			deslocamentoBackground -= 1;
-			if (deslocamentoBackground < background[0].getLargura() * -1)
-			{
-				deslocamentoBackground = 0;
-			}
-			deslocamentoAsteroide -= 1;
-			{
-				if (deslocamentoAsteroide < -700)
-					deslocamentoAsteroide = 0;
-			}
-			deslocamentoAsteroide2 -= 1;
-			{
-				if (deslocamentoAsteroide2 < -700)
-					deslocamentoAsteroide2 = 0;
-			}
-			deslocamentoAsteroide3 -= 1;
-			{
-				if (deslocamentoAsteroide3 < -700)
-					deslocamentoAsteroide3 = 0;
-			}
-
-			for (int i = 0; i < quantInimigos01; i++)
-			{
-				ondaInimigos01(momentoDaFase);
-			}
-
-			for (int i = 0; i < quantInimigos02; i++)
-			{
-				ondaInimigos02(momentoDaFase);
-			}
-
-			for (int i = 0; i < quantInimigos01; i++)
-			{
-				inimigo01[i].move();
-			}
-
-			inimigo02[0].move1();
-			inimigo02[1].move2();
- 
-			
-			for (int i = 0; i < quantLaser; i++)
-			{
-				laser[i].move();
-				vetorAnimExplosao[i].definirPosicao();
-				laser[i].avaliaColisao();
-			}
-
-			if (BossInimigo.getHP1() <= 0)
-			{
-				for (int i = 0; i < quantExplosoesBoss/2; i++)
+				// Caso o evento lido seja o apertar do botão Fechar, a variável sair recebe true
+				// e o looping principal é finalizado
+				if (e.type == SDL_QUIT)
 				{
-					vetorExplosoesBoss[i].atingido = true;
+					sair = true;
+					throw sair;
 				}
+				nave.avaliarEventos(e);
+				nave.avaliarEventosLaser(e);
 			}
-			if (BossInimigo.getHP2() <= 0)
+			if (gameover == false)
 			{
-				for (int i = 4; i < quantExplosoesBoss; i++)
+				if (timerBoss.getTempo() > tempoParaOBoss)
 				{
-					vetorExplosoesBoss[i].atingido = true;
+					momentoDaFase = false;
+					BossInimigo.aparecer = true;
+					timerBoss.parar();
+					timerDisparo.comecar();
 				}
-			}
 
-			BossDisparo.move();
+				if (timerDisparo.getTempo() > tempoParaDisparo && BossInimigo.morto == false)
+				{
+					BossDisparo.disparado = true;
+					timerDisparo.parar();
+					timerDisparo.comecar();
+				}
 
-			BossProjetil02.definePosicao();
-			BossProjetil02.move();
+				nave.move();
+				nave.avaliarColisao();
 
-			SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
-			SDL_RenderClear(gRenderizador);
-			background[0].renderizar(deslocamentoBackground, 0);
-			background[0].renderizar(deslocamentoBackground + background[0].getLargura(), 0);
+				deslocamentoBackground -= 1;
+				if (deslocamentoBackground < background[0].getLargura() * -1)
+				{
+					deslocamentoBackground = 0;
+				}
+				deslocamentoAsteroide -= 1;
+				{
+					if (deslocamentoAsteroide < -700)
+						deslocamentoAsteroide = 0;
+				}
+				deslocamentoAsteroide2 -= 1;
+				{
+					if (deslocamentoAsteroide2 < -700)
+						deslocamentoAsteroide2 = 0;
+				}
+				deslocamentoAsteroide3 -= 1;
+				{
+					if (deslocamentoAsteroide3 < -700)
+						deslocamentoAsteroide3 = 0;
+				}
 
-			for(int i = 0;i < larJanela;i = i + 128)
-			{
-				background[1].renderizar(deslocamentoBackground+i, 416);
-				background[1].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 416);
-			}
-			
-			for (int i = 0; i < larJanela; i = i + 128)
-			{
-				background[2].renderizar(deslocamentoBackground + i, 352);
-				background[2].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 352);
-			}
-			
-			for (int i = 0; i < larJanela; i = i + 128)
-			{
-				background[3].renderizar(deslocamentoBackground + i, 320);
-				background[3].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 320);
-			}
+				for (int i = 0; i < quantInimigos01; i++)
+				{
+					ondaInimigos01(momentoDaFase);
+				}
 
-			if (deslocamentoAsteroide <= -700)
-			{
-				r1 = 1 + rand() % (4 - 1 + 1);
-				y1 = 1 + rand() % (270 - 1 + 1);
-			}
-			
-			if (deslocamentoAsteroide2 <= -700)
-			{
-				r2 = 1 + rand() % (4 - 1 + 1);
-				y2 = 1 + rand() % (270 - 1 + 1);
-			}
-			if (deslocamentoAsteroide3 <= -700)
-			{
-				r3 = 1 + rand() % (4 - 1 + 1);
-				y3 = 1 + rand() % (270 - 1 + 1);
-			}
-			
-			switch(r1)
-			{
+				for (int i = 0; i < quantInimigos02; i++)
+				{
+					ondaInimigos02(momentoDaFase);
+				}
+
+				for (int i = 0; i < quantInimigos01; i++)
+				{
+					inimigo01[i].move();
+				}
+
+				inimigo02[0].move1();
+				inimigo02[1].move2();
+
+
+				for (int i = 0; i < quantLaser; i++)
+				{
+					laser[i].move();
+					vetorAnimExplosao[i].definirPosicao();
+					laser[i].avaliaColisao();
+				}
+
+				if (BossInimigo.getHP1() <= 0)
+				{
+					for (int i = 0; i < quantExplosoesBoss / 2; i++)
+					{
+						vetorExplosoesBoss[i].atingido = true;
+					}
+				}
+				if (BossInimigo.getHP2() <= 0)
+				{
+					for (int i = 4; i < quantExplosoesBoss; i++)
+					{
+						vetorExplosoesBoss[i].atingido = true;
+					}
+				}
+
+				BossDisparo.move();
+
+				BossProjetil02.definePosicao();
+				BossProjetil02.move();
+
+				SDL_SetRenderDrawColor(gRenderizador, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderizador);
+				background[0].renderizar(deslocamentoBackground, 0);
+				background[0].renderizar(deslocamentoBackground + background[0].getLargura(), 0);
+
+				for (int i = 0;i < larJanela;i = i + 128)
+				{
+					background[1].renderizar(deslocamentoBackground + i, 416);
+					background[1].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 416);
+				}
+
+				for (int i = 0; i < larJanela; i = i + 128)
+				{
+					background[2].renderizar(deslocamentoBackground + i, 352);
+					background[2].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 352);
+				}
+
+				for (int i = 0; i < larJanela; i = i + 128)
+				{
+					background[3].renderizar(deslocamentoBackground + i, 320);
+					background[3].renderizar(deslocamentoBackground + background[1].getLargura() * 5 + i, 320);
+				}
+
+				if (deslocamentoAsteroide <= -700)
+				{
+					r1 = 1 + rand() % (4 - 1 + 1);
+					y1 = 1 + rand() % (270 - 1 + 1);
+				}
+
+				if (deslocamentoAsteroide2 <= -700)
+				{
+					r2 = 1 + rand() % (4 - 1 + 1);
+					y2 = 1 + rand() % (270 - 1 + 1);
+				}
+				if (deslocamentoAsteroide3 <= -700)
+				{
+					r3 = 1 + rand() % (4 - 1 + 1);
+					y3 = 1 + rand() % (270 - 1 + 1);
+				}
+
+				switch (r1)
+				{
 				case 1:
-					background[4].renderizar(deslocamentoAsteroide + larJanela,y1);
+					background[4].renderizar(deslocamentoAsteroide + larJanela, y1);
 					break;
 				case 2:
 					background[5].renderizar(deslocamentoAsteroide + larJanela, y1);
@@ -722,109 +714,114 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				case 3:
 					background[6].renderizar(deslocamentoAsteroide + larJanela, y1);
 					break;
-				case 4: 
+				case 4:
 					background[7].renderizar(deslocamentoAsteroide + larJanela, y1);
 					break;
+				}
+				switch (r2)
+				{
+				case 1:
+					background[4].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+					break;
+				case 2:
+					background[5].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+					break;
+				case 3:
+					background[6].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+					break;
+				case 4:
+					background[7].renderizar(deslocamentoAsteroide2 + larJanela, y2);
+					break;
+				}
+
+				switch (r3)
+				{
+				case 1:
+					background[4].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+					break;
+				case 2:
+					background[5].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+					break;
+				case 3:
+					background[6].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+					break;
+				case 4:
+					background[7].renderizar(deslocamentoAsteroide3 + larJanela, y3);
+					break;
+				}
+
+				nave.renderizar();
+
+				SDL_Rect* clipAtual = &PropulsorClip[frame / 4];
+				propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 7, clipAtual, 180);
+				propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 22, clipAtual, 180);
+
+				frame++;
+
+				if (frame / 4 >= 4)
+				{
+					frame = 0;
+				}
+
+				for (int i = 0; i < quantLaser; i++)
+				{
+					laser[i].renderizar();
+				}
+
+				for (int i = 0; i < quantExplosoes; i++)
+				{
+					vetorAnimExplosao[i].renderizar();
+				}
+
+				for (int i = 0; i < quantInimigos01; i++)
+				{
+					inimigo01[i].renderizar();
+				}
+
+				inimigo02[0].renderizar();
+				inimigo02[1].renderizar();
+
+				BossDisparo.renderizar();
+
+				BossInimigo.renderizar();
+
+				BossProjetil02.renderizar();
+
+				vetorExplosoesBoss[0].renderizar02(500, 120);
+				vetorExplosoesBoss[1].renderizar02(590, 130);
+				vetorExplosoesBoss[2].renderizar02(530, 140);
+				vetorExplosoesBoss[3].renderizar02(550, 110);
+
+				vetorExplosoesBoss[4].renderizar02(500, 320);
+				vetorExplosoesBoss[5].renderizar02(590, 330);
+				vetorExplosoesBoss[6].renderizar02(530, 340);
+				vetorExplosoesBoss[7].renderizar02(550, 310);
 			}
-			switch(r2)
+
+
+			SDL_RenderPresent(gRenderizador);
+			if (nave.getHP() <= 0)
 			{
-			case 1:
-				background[4].renderizar(deslocamentoAsteroide2 + larJanela, y2);
-				break;
-			case 2:
-				background[5].renderizar(deslocamentoAsteroide2 + larJanela, y2);
-				break;
-			case 3:
-				background[6].renderizar(deslocamentoAsteroide2 + larJanela, y2);
-				break;
-			case 4:
-				background[7].renderizar(deslocamentoAsteroide2 + larJanela, y2);
-				break;
+				receberEventos = false;
+				sair = true;
+				std::cout << "false";
+				if (iniciar == true)
+				{
+					Gameover();
+				}
+				return false;
 			}
-
-			switch(r3)
+			else if (BossInimigo.getHP1() <= 0 && BossInimigo.getHP2() <= 0)
 			{
-			case 1:
-				background[4].renderizar(deslocamentoAsteroide3+ larJanela, y3);
-				break;
-			case 2:
-				background[5].renderizar(deslocamentoAsteroide3 + larJanela, y3);
-				break;
-			case 3:
-				background[6].renderizar(deslocamentoAsteroide3 + larJanela, y3);
-				break;
-			case 4:
-				background[7].renderizar(deslocamentoAsteroide3 + larJanela, y3);
-				break;
+				receberEventos = false;
+				sair = true;
+				pontuacaoAtual += PONT_BOSS;
+				reiniciarFase();
+				std::cout << "true";
+				vitoria();
+				return true;
 			}
-			
-			nave.renderizar();
-
-			SDL_Rect* clipAtual = &PropulsorClip[frame / 4];
-			propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 7, clipAtual, 180);
-			propulsorSpriteSheet.renderizar(nave.getPosX(), nave.getPosY() + 22, clipAtual, 180);
-
-			frame++;
-
-			if (frame/ 4 >= 4)
-			{
-				frame = 0;
-			}
-
-			for (int i = 0; i < quantLaser; i++)
-			{
-				laser[i].renderizar();
-			}
-
-			for (int i = 0; i < quantExplosoes; i++)
-			{
-				vetorAnimExplosao[i].renderizar();
-			}
-			
-			for (int i = 0; i < quantInimigos01; i++)
-			{
-				inimigo01[i].renderizar();
-			}
-
-			inimigo02[0].renderizar();
-			inimigo02[1].renderizar();
-
-			BossDisparo.renderizar();
-
-			BossInimigo.renderizar();
-
-			BossProjetil02.renderizar();
-
-			vetorExplosoesBoss[0].renderizar02(500, 120);
-			vetorExplosoesBoss[1].renderizar02(590, 130);
-			vetorExplosoesBoss[2].renderizar02(530, 140);
-			vetorExplosoesBoss[3].renderizar02(550, 110);
-
-			vetorExplosoesBoss[4].renderizar02(500, 320);
-			vetorExplosoesBoss[5].renderizar02(590, 330);
-			vetorExplosoesBoss[6].renderizar02(530, 340);
-			vetorExplosoesBoss[7].renderizar02(550, 310);
-		}
-		
-
-		SDL_RenderPresent(gRenderizador);
-		if (nave.getHP() <= 0)
-		{
-			receberEventos = false;
-			sair = true;
-			std::cout << "false";
-			Gameover();
-			return false;
-		}
-		else if (BossInimigo.getHP1() <= 0 && BossInimigo.getHP2() <= 0)
-		{
-			receberEventos = false;
-			sair = true;
-			pontuacaoAtual += PONT_BOSS;
-			reiniciarFase();
-			std::cout << "true";
-			vitoria();
-			return true;
 		}
 	}
+	return false;
 }

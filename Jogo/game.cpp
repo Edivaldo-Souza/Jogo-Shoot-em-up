@@ -17,10 +17,11 @@ int main(int argc, char* args[])
 	init();
 	loadMedia();
 	bool encerrar = false;
-	bool fase01,fase02,fase03 = false;
+	bool fase01,fase02,fase03,fase04 = false;
 
 	do
 	{
+		fase01, fase02, fase03, fase04 = false;
 		switch (iniciarMenu())
 		{
 		case 1:
@@ -29,8 +30,9 @@ int main(int argc, char* args[])
 			reiniciarFase();
 			try
 			{
-				fase02 = iniciarFase(fase01, 1, 1, 5, 0.0005);
-				fase03 = iniciarFase(fase02, 3, 1, 40, 0.0008);
+				fase02 = iniciarFase(fase01, 1, 1, 10, 0.0005);
+				fase03 = iniciarFase(fase02, 2, 2, 20, 0.0008);
+				fase04 = iniciarFase(fase03, 3, 3, 30, 0.0009);
 				escreveNoRanking(receberNome(), pontuacaoAtual);
 				
 			}
@@ -49,8 +51,6 @@ int main(int argc, char* args[])
 			encerrar = true;
 			break;
 		}
-		//SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
-		//SDL_RenderClear(gRenderizador);
 	} while (encerrar == false);
 	close();
 	return 0;
