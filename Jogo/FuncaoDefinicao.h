@@ -30,7 +30,7 @@ bool loadMedia()
 	naveSpriteSheet.setBlendMode(SDL_BLENDMODE_BLEND);
 	propulsorSpriteSheet.loadFromFile("spritesheets_2/Thruster_04.png", 0xFF, 0xFF, 0xFF);
 	projeteisSpriteSheet.loadFromFile("spritesheets_2/Fx_012.png", 0xFF, 0, 0xFF);
-	inimigo01SpriteSheet.loadFromFile("spritesheets/Spaceships.png", 0xFF, 0, 0xFF);
+	inimigoSpriteSheet.loadFromFile("spritesheets/Spaceships.png", 0xFF, 0, 0xFF);
 	explosaoSpriteSheet.loadFromFile("spritesheets_2/explosion.png", 0xFF, 0, 0xFF);
 	background[0].loadFromFile("background/background.png", 0xFF, 0, 0);
 	background[1].loadFromFile("background/Surface_Layer3.png", 0xFF, 0, 0);
@@ -83,15 +83,20 @@ bool loadMedia()
 	laserClip[0].w = 32;
 	laserClip[0].h = 32;
 	// Declaração dos parâmetros da SDL_Rect que armazenará certa porção da textura com os sprites do inimigo01
-	inimigo01Clip[0].x = 125;
-	inimigo01Clip[0].y = 70;
-	inimigo01Clip[0].w = 65;
-	inimigo01Clip[0].h = 61;
+	inimigoClip[0].x = 125;
+	inimigoClip[0].y = 70;
+	inimigoClip[0].w = 65;
+	inimigoClip[0].h = 61;
 
-	inimigo01Clip[1].x = 190;
-	inimigo01Clip[1].y = 70;
-	inimigo01Clip[1].w = 65;
-	inimigo01Clip[1].h = 61;
+	inimigoClip[1].x = 190;
+	inimigoClip[1].y = 70;
+	inimigoClip[1].w = 65;
+	inimigoClip[1].h = 61;
+
+	inimigoClip[2].x = 0;
+	inimigoClip[2].y = 70;
+	inimigoClip[2].w = 65;
+	inimigoClip[2].h = 61;
 
 	explosaoclip[0].x = 0;
 	explosaoclip[0].y = 0;
@@ -171,7 +176,7 @@ void close()
 	// Apaga os valores das variáveis desse objeto LTextura 
 	naveSpriteSheet.free();
 	projeteisSpriteSheet.free();
-	inimigo01SpriteSheet.free();
+	inimigoSpriteSheet.free();
 	bossSpriteSheet.free();
 	Mix_FreeMusic(musicaFase);
 	musicaFase = NULL;
@@ -236,6 +241,23 @@ void ondaInimigos02(bool flag)
 	}
 }
 
+void ondaInimigos03(bool flag)
+{
+
+	if (flag == true)
+	{
+		if (inimigo03[0].morto == true && inimigo03[1].morto == true && inimigo03[2].morto == true)
+		{
+			inimigo03[0].morto = false;
+			inimigo03[1].morto = false;
+			inimigo03[2].morto = false;
+			inimigo03[0].partida = false;
+			inimigo03[1].partida = false;
+			inimigo03[2].partida = false;
+		}
+	}
+}
+
 void reiniciarFase()
 {
 	nave.redefinir();
@@ -246,6 +268,10 @@ void reiniciarFase()
 	for (int i = 0; i < quantInimigos02; i++)
 	{
 		inimigo02[i].definePosicao();
+	}
+	for (int i = 0; i < quantInimigos03; i++)
+	{
+		inimigo03[i].definePosicao();
 	}
 	for (int i = 0; i < quantLaser; i++)
 	{
@@ -523,13 +549,13 @@ void escreveNoRanking(std::string nomeJogador, int pontuacao)
 	fclose(ranking);
 }
 
-bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo)
+bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03, int HPBoss, float tempoDisparo)
 {
 	bool sair = true;
 	bool momentoDaFase = true;
 	bool gameover = false;
 	bool receberEventos = true;
-	Uint32 tempoParaOBoss = 10000;
+	Uint32 tempoParaOBoss = 20000;
 	Uint32 tempoParaDisparo = 5000;
 	Uint32 tempoParaEncerramento = 2000;
 	int deslocamentoBackground = 0;
@@ -553,6 +579,10 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 	for (int i = 0; i < quantInimigos02; i++)
 	{
 		inimigo02[i].HPdefinido = HPinimigo02;
+	}
+	for (int i = 0; i < quantInimigos02; i++)
+	{
+		inimigo03[i].HPdefinido = HPinimigo03;
 	}
 	*BossInimigo.ponteiroHP1 = HPBoss;
 	*BossInimigo.ponteiroHP2 = HPBoss;
@@ -627,6 +657,11 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 					ondaInimigos02(momentoDaFase);
 				}
 
+				for (int i = 0; i < quantInimigos03; i++)
+				{
+					ondaInimigos03(momentoDaFase);
+				}
+
 				for (int i = 0; i < quantInimigos01; i++)
 				{
 					inimigo01[i].move();
@@ -635,6 +670,22 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				inimigo02[0].move1();
 				inimigo02[1].move2();
 
+				
+				inimigo03[0].partida = true;
+				inimigo03[0].move();
+
+				if (inimigo03[0].getPosX() < 580)
+				{
+					inimigo03[1].partida = true;
+				}
+				if (inimigo03[1].getPosX() < 580)
+				{
+					inimigo03[2].partida = true;
+				}
+				
+				inimigo03[1].move();
+				inimigo03[2].move();
+				
 
 				for (int i = 0; i < quantLaser; i++)
 				{
@@ -781,6 +832,11 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				inimigo02[0].renderizar();
 				inimigo02[1].renderizar();
 
+				for (int i = 0; i < quantInimigos03; i++)
+				{
+					inimigo03[i].renderizar();
+				}
+
 				BossDisparo.renderizar();
 
 				BossInimigo.renderizar();
@@ -798,7 +854,7 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, flo
 				vetorExplosoesBoss[7].renderizar02(550, 310);
 			}
 
-
+			
 			SDL_RenderPresent(gRenderizador);
 			if (nave.getHP() <= 0)
 			{

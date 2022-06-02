@@ -13,6 +13,7 @@ enum PontosPorInimigo
 {
 	PONT_INIMIGO01 = 10,
 	PONT_INIMIGO02 = 10,
+	PONT_INIMIGO03 = 10,
 	PONT_BOSS = 100,
 };
 
@@ -25,6 +26,8 @@ const int quantProjetilBoss02 = 4;
 const int quantInimigos01 = 3;
 
 const int quantInimigos02 = 2;
+
+const int quantInimigos03 = 3;
 
 const int quantExplosoes = 15;
 
@@ -69,9 +72,7 @@ SDL_Rect clipAtual;
 SDL_Rect laserClip[2];
 
 // Declaração do vetor de SDL_Rect que armazena os sprites do objInimigo01 "inimigo01"
-SDL_Rect inimigo01Clip[2];
-
-SDL_Rect inimigo02Clip[2];
+SDL_Rect inimigoClip[3];
 
 SDL_Rect explosaoclip[8];
 

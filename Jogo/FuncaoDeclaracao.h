@@ -16,7 +16,7 @@ bool verificaColisao(SDL_Rect a, SDL_Rect b);
 
 int iniciarMenu();
 
-bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPBoss, float tempoDisparo);
+bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03, int HPBoss, float tempoDisparo);
 
 void Gameover();
 

@@ -265,6 +265,15 @@ void objJogador::avaliarColisao()
 				tempoInvencibilidade.comecar();
 			}
 		}
+		for (int i = 0; i < quantInimigos03; i++)
+		{
+			if (verificaColisao(caixaDeColisao, inimigo03[i].getCaixaDeColisao()) == true)
+			{
+				HP -= 1;
+				inimigo03[i].definePosicao();
+				tempoInvencibilidade.comecar();
+			}
+		}
 
 		if (verificaColisao(caixaDeColisao, BossDisparo.getCaixaDeColisao()) == true && BossDisparo.disparado == true)
 		{
@@ -433,6 +442,19 @@ void objProjetilLaser::avaliaColisao()
 			disparado = false;
 		}
 	}
+	for (int i = 0; i < quantInimigos03; i++)
+	{
+		if (verificaColisao(caixaDeColisao, inimigo03[i].getCaixaDeColisao()) == true && disparado == true)
+		{
+			*inimigo03[i].ponteiroHP -= DANO;
+			if (*inimigo03[i].ponteiroHP <= 0)
+			{
+				inimigo03[i].definePosicao();
+				pontuacaoAtual += PONT_INIMIGO03;
+			}
+			disparado = false;
+		}
+	}
 	for (int i = 0; i < BossInimigo.totalDeCaixas; i++)
 	{
 		if (verificaColisao(caixaDeColisao, BossInimigo.ponteiroCaixaDeColisao[i]) == true && disparado == true && BossInimigo.morto == false)
@@ -548,7 +570,7 @@ void objInimigo01::renderizar()
 {
 	if (morto == false)
 	{
-		inimigo01SpriteSheet.renderizar(posX, posY, &inimigo01Clip[0], 0);
+		inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[0], 0);
 	}
 }
 
@@ -675,7 +697,7 @@ void objInimigo02::renderizar()
 {
 	if (morto == false)
 	{
-		inimigo01SpriteSheet.renderizar(posX, posY, &inimigo01Clip[1], 270);
+		inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[1], 270);
 	}
 }
 
@@ -690,6 +712,162 @@ int objInimigo02::getPosX()
 }
 
 int objInimigo02::getPosY()
+{
+	return posY;
+}
+
+objInimigo03::objInimigo03()
+{
+	HPmutavel = HPdefinido;
+	posX = larJanela;
+	posY = altJanela / 4;
+	caixaDeColisao.x = posX;
+	caixaDeColisao.y = posY;
+	caixaDeColisao.w = larInimigo;
+	caixaDeColisao.h = altInimigo;
+}
+
+void objInimigo03::definePosicao()
+{
+	HPmutavel = HPdefinido;
+	posX = larJanela;
+	posY = altJanela / 4;
+	caixaDeColisao.x = posX;
+	caixaDeColisao.y = posY;
+	morto = true;
+	circ = false;
+	partida = false;
+}
+
+void objInimigo03::move()
+{
+
+	if (partida == true)
+	{
+		if (morto == false)
+		{
+
+			if (posX == larJanela / 2 && altJanela / 4)
+			{
+				circ = true;
+			}
+			else
+			{
+				if (posX < 260 && posY > 180)
+				{
+					sentidoX = 2;
+				}
+				else
+				{
+					if (posX > 380 && posY < 180)
+					{
+						sentidoX = 1;
+					}
+					else
+					{
+						if (posY > 240)
+						{
+							sentidoY = 2;
+						}
+						else
+						{
+							if (posX < 325 && posY < 120)
+							{
+								sentidoY = 1;
+								circ = false;
+							}
+						}
+					}
+				}
+			}
+			if (circ == true)
+			{
+				if (sentidoX == 1)
+				{
+					posX -= velocidadeEixoX;
+					caixaDeColisao.x -= velocidadeEixoX;
+				}
+				else
+				{
+					posX += velocidadeEixoX;
+					caixaDeColisao.x += velocidadeEixoX;
+				}
+				if (sentidoY == 1)
+				{
+					posY += velocidadeEixoY;
+					caixaDeColisao.y += velocidadeEixoY;
+				}
+				else
+				{
+					posY -= velocidadeEixoY;
+					caixaDeColisao.y -= velocidadeEixoY;
+				}
+			}
+			else
+			{
+				posX -= velocidadeEixoX;
+				caixaDeColisao.x -= velocidadeEixoX;
+			}
+
+		}
+	}
+	
+	if (posX < larInimigo * -1)
+	{
+		definePosicao();
+	}
+}
+
+void objInimigo03::renderizar()
+{
+	if (morto == false)
+	{
+		if (sentidoX == 1 && sentidoY == 1 && circ==true)
+		{
+			inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[2], 120);
+		}
+		else
+		{
+			if (sentidoX == 1 && sentidoY == 1 && circ == false)
+			{
+				inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[2], 180);
+			}
+			else
+			{
+				if (sentidoX == 2 && sentidoY == 1 && circ==true)
+				{
+					inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[2], 70);
+				}
+				else
+				{
+					if (sentidoX == 2 && sentidoY == 2 && circ == true)
+					{
+						inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[2], 300);
+					}
+					else
+					{
+						if (sentidoX == 1 && sentidoY == 2 && circ == true)
+						{
+							inimigoSpriteSheet.renderizar(posX, posY, &inimigoClip[2], 230);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+SDL_Rect objInimigo03::getCaixaDeColisao()
+{
+	return caixaDeColisao;
+}
+
+int objInimigo03::getPosX()
+{
+	return posX;
+}
+
+int objInimigo03::getPosY()
 {
 	return posY;
 }
@@ -1049,6 +1227,27 @@ void AnimExplosao::definirPosicao()
 					Mix_PlayChannel(-1,somExplosao,0);
 					posX = inimigo02[j].getPosX();
 					posY = inimigo02[j].getPosY();
+					atingido = true;
+					break;
+				}
+			}
+			if (atingido == true)
+			{
+				break;
+			}
+		}
+	}
+	if (atingido == false)
+	{
+		for (int i = 0; i < quantLaser; i++)
+		{
+			for (int j = 0; j < quantInimigos03; j++)
+			{
+				if (verificaColisao(laser[i].getCaixaDeColisao(), inimigo03[j].getCaixaDeColisao()) && atingido == false && inimigo03[j].morto == false && laser[i].disparado == true && *inimigo03[j].ponteiroHP == 1)
+				{
+					Mix_PlayChannel(-1, somExplosao, 0);
+					posX = inimigo03[j].getPosX();
+					posY = inimigo03[j].getPosY();
 					atingido = true;
 					break;
 				}

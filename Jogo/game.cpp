@@ -30,9 +30,9 @@ int main(int argc, char* args[])
 			reiniciarFase();
 			try
 			{
-				fase02 = iniciarFase(fase01, 1, 1, 10, 0.0005);
-				fase03 = iniciarFase(fase02, 2, 2, 20, 0.0008);
-				fase04 = iniciarFase(fase03, 3, 3, 30, 0.0009);
+				fase02 = iniciarFase(fase01, 1, 1, 1, 10, 0.0005);
+				fase03 = iniciarFase(fase02, 2, 2, 2, 20, 0.0008);
+				fase04 = iniciarFase(fase03, 3, 3, 3, 30, 0.0009);
 				escreveNoRanking(receberNome(), pontuacaoAtual);
 				
 			}

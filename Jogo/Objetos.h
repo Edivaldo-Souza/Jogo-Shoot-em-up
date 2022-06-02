@@ -12,9 +12,7 @@ LTextura propulsorSpriteSheet;
 LTextura projeteisSpriteSheet;
 
 // Armazena a imagem com os sprites do inimigo01
-LTextura inimigo01SpriteSheet;
-
-LTextura inimigo02SpriteSheet;
+LTextura inimigoSpriteSheet;
 
 LTextura explosaoSpriteSheet;
 
@@ -50,6 +48,8 @@ objProjetilLaser laser[quantLaser];
 objInimigo01 inimigo01[quantInimigos01];
 
 objInimigo02 inimigo02[quantInimigos02]; //quantInimigos02 = 2
+
+objInimigo03 inimigo03[quantInimigos03];
 
 objBoss BossInimigo;
 

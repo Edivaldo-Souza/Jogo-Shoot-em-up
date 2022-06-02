@@ -188,7 +188,7 @@ public:
 	const int altInimigo = 45;
 
 	// velocidade no eixo x do inimigo
-	const int velocidadeEixoX = 5;
+	const int velocidadeEixoX = 4;
 
 	// velocidade no eixo y do inimigo
 	const int velocidadeEixoY = 1;
@@ -245,7 +245,7 @@ public:
 
 	const int altInimigo = 45;
 
-	const int velocidadeEixoX = 5;
+	const int velocidadeEixoX = 4;
 
 	const int velocidadeEixoY = 6;
 
@@ -285,6 +285,63 @@ private:
 	int posY;
 
 	SDL_Rect caixaDeColisao;
+};
+
+
+class objInimigo03
+{
+public:
+	const int larInimigo = 30;
+
+	const int altInimigo = 25;
+
+	const int velocidadeEixoX = 5;
+
+	const int velocidadeEixoY = 5;
+
+	int sentidoX = 1;
+
+	int sentidoY = 1;
+
+	int HPdefinido = 1;
+
+	int* ponteiroHP = &HPmutavel;
+
+	bool morto = true;
+
+	bool circ = false;
+
+	bool partida = false;
+
+	objInimigo03();
+
+	void definePosicao();
+
+	void move();
+
+	void renderizar();
+
+	int getAltura();
+
+	int getLargura();
+
+	int getPosX();
+
+	int getPosY();
+
+
+	SDL_Rect getCaixaDeColisao();
+
+private:
+
+	int HPmutavel;
+
+	int posX;
+
+	int posY;
+
+	SDL_Rect caixaDeColisao;
+
 };
 
 
