@@ -747,7 +747,7 @@ void objInimigo03::move()
 		if (morto == false)
 		{
 
-			if (posX == larJanela / 2 && altJanela / 4)
+			if (posX == larJanela / 2 && posY == altJanela / 4)
 			{
 				circ = true;
 			}

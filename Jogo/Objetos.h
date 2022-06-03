@@ -38,6 +38,8 @@ LTextura InserirNome;
 
 LTextura EntradaNome;
 
+LTextura PlayerOnRanking[10];
+
 // Declaração do objJogador que corresponde ao objeto manipulável pelo jogador
 objJogador nave;
 

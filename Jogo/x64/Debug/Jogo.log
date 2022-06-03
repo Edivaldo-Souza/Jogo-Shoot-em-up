@@ -1,13 +1,14 @@
 ﻿  game.cpp
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\constantes.h(2,10): warning C4067: tokens inesperados após diretiva de pré-processador - esperado um newline
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(891,28): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(892,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(899,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(900,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(290,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(298,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(33,50): warning C4305: 'argumento': truncamento de 'double' para 'float'
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(34,50): warning C4305: 'argumento': truncamento de 'double' para 'float'
-C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(35,50): warning C4305: 'argumento': truncamento de 'double' para 'float'
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(1069,28): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(1070,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(1077,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\ClassDefinicao.h(1078,29): warning C4244: '+=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(316,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\FuncaoDefinicao.h(324,21): warning C4553: '==': o resultado da expressão não usado; você pretendia que fosse '='?
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(33,53): warning C4305: 'argumento': truncamento de 'double' para 'float'
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(34,53): warning C4305: 'argumento': truncamento de 'double' para 'float'
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(35,53): warning C4305: 'argumento': truncamento de 'double' para 'float'
 C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(39,16): warning C4101: 'sair': variável local não referenciada
+C:\Users\loja\Desktop\Jogo Projeto\Game C++\Jogo\game.cpp(51,16): warning C4101: 'sair': variável local não referenciada
   Jogo.vcxproj -> C:\Users\loja\Desktop\Jogo Projeto\Game C++\x64\Debug\Jogo.exe

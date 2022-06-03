@@ -466,15 +466,15 @@ void vitoria()
 	}
 }
 
-std::string receberNome()
+std::string setPlayerName()
 {
 	bool sair = true;
 	bool recemIniciado = true;
 	SDL_Event e;
 	SDL_Color corDoTexto = { 0xFF,0xFF,0xFF,0xFF };
-	std::string nomeJogador = " ";
+	std::string playerName = " ";
 	InserirNome.carregarTexto("Insira seu nome: ", corDoTexto,gFonte);
-	EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto,gFonte);
+	EntradaNome.carregarTexto(playerName.c_str(), corDoTexto,gFonte);
 	
 	SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 0xFF);
 	SDL_RenderClear(gRenderizador);
@@ -501,27 +501,27 @@ std::string receberNome()
 			
 			if (e.type == SDL_KEYDOWN)
 			{
-				if (e.key.keysym.sym == SDLK_BACKSPACE && nomeJogador.length() > 0)
+				if (e.key.keysym.sym == SDLK_BACKSPACE && playerName.length() > 0)
 				{
-					nomeJogador.pop_back();
+					playerName.pop_back();
 					atualizarTexto = true;
-					std::cout << nomeJogador << std::endl;
+					std::cout << playerName << std::endl;
 				}
 			}
 			else if (e.type == SDL_TEXTINPUT)
 			{
-				nomeJogador += e.text.text;
+				playerName += e.text.text;
 				recemIniciado = false;
 				atualizarTexto = true;
-				std::cout << nomeJogador << std::endl;
+				std::cout << playerName << std::endl;
 			}
 			nave.avaliarEventos(e);
 		}
 		if (atualizarTexto == true)
 		{
-			if (nomeJogador != "")
+			if (playerName != "")
 			{
-				EntradaNome.carregarTexto(nomeJogador.c_str(), corDoTexto,gFonte);
+				EntradaNome.carregarTexto(playerName.c_str(), corDoTexto,gFonte);
 			}
 			else
 			{
@@ -536,18 +536,9 @@ std::string receberNome()
 		SDL_RenderPresent(gRenderizador);
 	}
 	SDL_StopTextInput();
-	return nomeJogador;
+	return playerName;
 }
 
-void escreveNoRanking(std::string nomeJogador, int pontuacao)
-{
-	FILE* ranking = NULL;
-	int colocacao = 1;
-	
-	ranking = fopen("planilha/ranking.tsv", "w");
-	//fprintf(ranking, "%i\t%s\t%i", colocacao,nomeJogador, pontuacao);
-	fclose(ranking);
-}
 
 bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03, int HPBoss, float tempoDisparo)
 {
@@ -657,11 +648,6 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03
 					ondaInimigos02(momentoDaFase);
 				}
 
-				for (int i = 0; i < quantInimigos03; i++)
-				{
-					ondaInimigos03(momentoDaFase);
-				}
-
 				for (int i = 0; i < quantInimigos01; i++)
 				{
 					inimigo01[i].move();
@@ -671,20 +657,36 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03
 				inimigo02[1].move2();
 
 				
-				inimigo03[0].partida = true;
-				inimigo03[0].move();
+				if (timerBoss.foiIniciado() == true)
+				{
+					if (inimigo03[1].partida == false && inimigo03[2].partida == false && inimigo03[1].morto == true && inimigo03[2].morto == true) {
+						inimigo03[0].partida = true;
+						inimigo03[0].morto = false;
+					}
+					inimigo03[0].move();
 
-				if (inimigo03[0].getPosX() < 580)
-				{
-					inimigo03[1].partida = true;
+					if (inimigo03[0].getPosX() < 580 && inimigo03[0].morto == false && inimigo03[0].partida == true)
+					{
+						inimigo03[1].partida = true;
+						inimigo03[1].morto = false;
+					}
+					
+					if (inimigo03[1].getPosX() < 580 && inimigo03[1].morto == false && inimigo03[1].partida == true)
+					{
+						inimigo03[2].partida = true;
+						inimigo03[2].morto = false;
+					}
+					
+					inimigo03[1].move();
+					inimigo03[2].move();
 				}
-				if (inimigo03[1].getPosX() < 580)
+				else
 				{
-					inimigo03[2].partida = true;
+					for (int i = 0; i < quantInimigos03; i++)
+					{
+						inimigo03[i].definePosicao();
+					}
 				}
-				
-				inimigo03[1].move();
-				inimigo03[2].move();
 				
 
 				for (int i = 0; i < quantLaser; i++)
@@ -880,4 +882,108 @@ bool iniciarFase(bool iniciar, int HPinimigo01, int HPinimigo02, int HPinimigo03
 		}
 	}
 	return false;
+}
+
+void escreveNoRanking(std::string playerName, int score)
+{
+	FILE* ranking = NULL;
+
+	ranking = fopen("planilha/ranking.csv", "a");
+
+	if (ranking == NULL) {
+		printf("ERRO: Nao foi possivel abrir o arquivo\n");
+	}
+
+	fprintf(ranking, "%s;%i\n", playerName.c_str(), score);
+
+	fclose(ranking);
+}
+
+void read_ranking()
+{
+	struct playerWithScore {
+		std::string name;
+		int score;
+	};
+
+	SDL_Event e;
+	SDL_Color c1 = { 0xFF,0xFF,0xFF };
+	bool exit = false;
+
+	LTextura mensagemParaSair;
+	mensagemParaSair.carregarTexto("Aperte ESC para sair", c1, gFonte2);
+
+	FILE* ranking;
+	char playerName[30];
+	int score;
+
+	ranking = fopen("planilha/ranking.csv", "r");
+
+	if (ranking == NULL) {
+		printf("ERRO: Nao foi possivel abrir o arquivo\n");
+	}
+
+	playerWithScore playersList[10];
+	int index = 0;
+
+	while (fscanf(ranking, "%[^;];%i\n", &playerName, &score) != EOF)
+	{
+		playerWithScore playerAndScore = { playerName, score };
+		playersList[index] = playerAndScore;
+		std::cout << playersList[index].name;
+		std::cout << playersList[index].score;
+		index++;
+	}
+
+	fclose(ranking);
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = i; j < 10; j++)
+		{
+			if (playersList[i].score < playersList[j].score)
+			{
+				playerWithScore temp = playersList[i];
+				playersList[i] = playersList[j];
+				playersList[j] = temp;
+			}
+		}
+	}
+
+	for (int i = 0; i < index; i++)
+	{
+		std::cout << "texture loading" << playersList[i].name << " - " << playersList[i].score << "\n";
+		PlayerOnRanking[i].carregarTexto(playersList[i].name + " - " + std::to_string(playersList[i].score), c1, gFonte2);
+	}
+
+	while (!exit)
+	{
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT)
+			{
+				exit = true;
+				throw exit;
+			}
+			else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_ESCAPE)
+			{
+				exit = true;
+			}
+			nave.avaliarEventos(e);
+		}
+		SDL_SetRenderDrawColor(gRenderizador, 0, 0, 0, 255);
+		SDL_RenderClear(gRenderizador);
+
+		mensagemParaSair.renderizar(10, 10);
+		PlayerOnRanking[0].renderizar(160, 50);
+		PlayerOnRanking[1].renderizar(160, 80);
+		PlayerOnRanking[2].renderizar(160, 110);
+		PlayerOnRanking[3].renderizar(160, 130);
+		PlayerOnRanking[4].renderizar(160, 160);
+		PlayerOnRanking[5].renderizar(160, 190);
+		PlayerOnRanking[6].renderizar(160, 210);
+		PlayerOnRanking[7].renderizar(160, 230);
+		PlayerOnRanking[8].renderizar(160, 260);
+		PlayerOnRanking[9].renderizar(160, 290);
+		SDL_RenderPresent(gRenderizador);
+	}
 }

@@ -33,7 +33,7 @@ int main(int argc, char* args[])
 				fase02 = iniciarFase(fase01, 1, 1, 1, 10, 0.0005);
 				fase03 = iniciarFase(fase02, 2, 2, 2, 20, 0.0008);
 				fase04 = iniciarFase(fase03, 3, 3, 3, 30, 0.0009);
-				escreveNoRanking(receberNome(), pontuacaoAtual);
+				escreveNoRanking(setPlayerName(), pontuacaoAtual);
 				
 			}
 			catch (bool sair)
@@ -44,7 +44,15 @@ int main(int argc, char* args[])
 			break;
 
 		case 2:
-			//ranking
+			try
+			{
+				read_ranking();
+			}
+			catch (bool sair)
+			{
+				encerrar = true;
+				break;
+			}
 			break;
 
 		case 3:

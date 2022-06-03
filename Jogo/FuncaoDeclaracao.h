@@ -22,6 +22,8 @@ void Gameover();
 
 void vitoria();
 
-std::string receberNome();
+std::string setPlayerName();
 
-void escreveNoRanking(std::string nomeJogador, int pontuacao);
+void escreveNoRanking(std::string playerName, int score);
+
+void read_ranking();
